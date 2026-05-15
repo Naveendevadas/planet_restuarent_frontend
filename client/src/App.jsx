@@ -512,7 +512,7 @@ function Navbar({ sectionRefs }) {
   return (
     <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
       <div className="logo-wrap">
-        <img src="public/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
+        <img src="/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
       </div>
       <ul className="nav-links">
         {links.map(({ label, ref }) => (

@@ -549,7 +549,7 @@ export default function MenuPage() {
         {/* ── TOP NAV (fixed) ── */}
         <nav className="mp-nav">
           <a className="mp-logo" href="/">
-            <img src="public/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
+            <img src="/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
           </a>
           <div className="mp-nav-right">
             <span className="mp-item-count">{filtered.length} dishes</span>
