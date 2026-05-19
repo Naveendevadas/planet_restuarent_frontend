@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
-const PAYLOAD_API = "http://localhost:3000";
+const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const FRONTEND_ORIGIN = "http://localhost:5173";
 
 // ─── CATEGORY DATA ────────────────────────────────────────────────────────────

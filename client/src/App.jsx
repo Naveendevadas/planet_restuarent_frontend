@@ -4,8 +4,9 @@ import Menu from "./components/menu";
 import PlanetCorner from "./components/PlanetCorner";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
-const PAYLOAD_API = "http://localhost:3000";
-const FRONTEND_ORIGIN = "http://localhost:5173";
+// ✅ Fix it like this
+const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const FRONTEND_ORIGIN = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";
 const PLANET_MAIN_RESTAURANT_ID = "69e8bf62343989f4f166f11b";
 const STATUS_REFRESH_MS = 30_000;
 

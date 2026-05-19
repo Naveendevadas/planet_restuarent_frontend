@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
-const PAYLOAD_API = "http://localhost:3000";
+const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const PLANET_CORNER_RESTAURANT_ID = "69f9925feec1d85e57ef4d07";
 
 const categoryLabels = {
