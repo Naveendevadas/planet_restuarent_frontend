@@ -371,7 +371,7 @@ function useMenuItems() {
     setError(null);
     try {
       const res = await fetch(
-  `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
+  `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=2&limit=100`,
   {
     headers: { "Content-Type": "application/json" },
     mode: "cors",
@@ -382,16 +382,20 @@ function useMenuItems() {
 
       const mapped = (data.docs || []).map((doc) => {
         let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-        if (doc.image) {
-          if (typeof doc.image === "string") {
-            imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-          } else if (doc.image?.url) {
-            const rawUrl = doc.image.url;
-            imgUrl = rawUrl.startsWith("http") ? rawUrl : `${PAYLOAD_API}${rawUrl}`;
-          } else if (doc.image?.filename) {
-            imgUrl = `${PAYLOAD_API}/media/${doc.image.filename}`;
-          }
-        }
+       if (doc.image) {
+  if (doc.image?.url) {
+    // ✅ Populated image object with url
+    imgUrl = doc.image.url.startsWith("http")
+      ? doc.image.url
+      : `${PAYLOAD_API}${doc.image.url}`;
+  } else if (doc.image?.filename) {
+    // ✅ Populated image object with filename
+    imgUrl = `${PAYLOAD_API}/media/${doc.image.filename}`;
+  } else if (typeof doc.image === "string") {
+    // ✅ Only an ID returned — fetch directly from media endpoint
+    imgUrl = `${PAYLOAD_API}/api/media/${doc.image}`;
+  }
+}
         return {
           id:          doc.id,
           name:        doc.name,
