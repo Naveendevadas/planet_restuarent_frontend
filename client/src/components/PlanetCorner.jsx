@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
-const PLANET_CORNER_RESTAURANT_ID = "69f9925feec1d85e57ef4d07";
+const PLANET_CORNER_RESTAURANT_ID = "6a0c309cc802dc1b90cf0bbb"; // ← add this
 
 const categoryLabels = {
   "ice-cream": "Ice Creams",

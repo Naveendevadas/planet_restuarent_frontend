@@ -7,7 +7,7 @@ import PlanetCorner from "./components/PlanetCorner";
 // ✅ Fix it like this
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const FRONTEND_ORIGIN = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";
-const PLANET_MAIN_RESTAURANT_ID = "69e8bf62343989f4f166f11b";
+const PLANET_MAIN_RESTAURANT_ID = "6a0bea7b41a1fafddaf26d7c";
 const STATUS_REFRESH_MS = 30_000;
 
 // ─── CATEGORY LABEL MAP ───────────────────────────────────────────────────────
@@ -805,7 +805,7 @@ function Footer({ sectionRefs }) {
         {/* ── Brand ── */}
         <div className="footer-brand">
           <div className="logo-wrap">
-            <img src="public/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
+            <img src="/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
           </div>
           <p>Where every meal is a journey around the world. Fresh ingredients, master chefs, and unforgettable flavors — only at Planet.</p>
           {/* Social links */}
