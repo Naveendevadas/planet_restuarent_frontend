@@ -6,7 +6,7 @@ import PlanetCorner from "./components/PlanetCorner";
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 // ✅ Fix it like this
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
-const FRONTEND_ORIGIN = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";
+// const FRONTEND_ORIGIN = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";
 const PLANET_MAIN_RESTAURANT_ID = "6a0bea7b41a1fafddaf26d7c";
 const STATUS_REFRESH_MS = 30_000;
 
@@ -335,14 +335,13 @@ function useRestaurantStatus() {
   const [loading,     setLoading]     = useState(true);
 
   const fetchStatus = () => {
-    fetch(
-      `${PAYLOAD_API}/api/restaurant/${PLANET_MAIN_RESTAURANT_ID}`,
-      {
-        headers: { "Content-Type": "application/json", "Origin": FRONTEND_ORIGIN },
-        mode: "cors",
-        credentials: "include",
-      }
-    )
+   fetch(
+  `${PAYLOAD_API}/api/restaurant/${PLANET_MAIN_RESTAURANT_ID}`,
+  {
+    headers: { "Content-Type": "application/json" },
+    mode: "cors",
+  }
+)
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(doc => {
         setStatus(doc.status ?? "active");
@@ -372,16 +371,12 @@ function useMenuItems() {
     setError(null);
     try {
       const res = await fetch(
-        `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Origin": FRONTEND_ORIGIN,
-          },
-          mode: "cors",
-          credentials: "include",
-        }
-      );
+  `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
+  {
+    headers: { "Content-Type": "application/json" },
+    mode: "cors",
+  }
+);
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
 
