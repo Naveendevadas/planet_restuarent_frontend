@@ -371,7 +371,7 @@ function useMenuItems() {
     setError(null);
     try {
       const res = await fetch(
-  `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=2&limit=100`,
+  `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
   {
     headers: { "Content-Type": "application/json" },
     mode: "cors",
