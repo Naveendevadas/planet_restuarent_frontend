@@ -383,18 +383,24 @@ function useMenuItems() {
       const mapped = (data.docs || []).map((doc) => {
         let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
        if (doc.image) {
+ if (doc.image) {
   if (doc.image?.url) {
-    // ✅ Populated image object with url
     imgUrl = doc.image.url.startsWith("http")
       ? doc.image.url
       : `${PAYLOAD_API}${doc.image.url}`;
   } else if (doc.image?.filename) {
-    // ✅ Populated image object with filename
-    imgUrl = `${PAYLOAD_API}/media/${doc.image.filename}`;
+    imgUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${doc.image.filename}`;
   } else if (typeof doc.image === "string") {
-    // ✅ Only an ID returned — fetch directly from media endpoint
-    imgUrl = `${PAYLOAD_API}/api/media/${doc.image}`;
+    // ID only — fetch from media API and get the url field
+    try {
+      const mediaRes = await fetch(`${PAYLOAD_API}/api/media/${doc.image}?depth=0`);
+      const mediaDoc = await mediaRes.json();
+      imgUrl = mediaDoc?.url || imgUrl;
+    } catch {
+      // keep fallback
+    }
   }
+}
 }
         return {
           id:          doc.id,
