@@ -2,7 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
-const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3001";
+
+function menuImageUrl(image, apiBase) {
+  if (!image?.url && !image?.filename) return null;
+  if (image.url && !image.url.includes("undefined.s3.")) {
+    return image.url.startsWith("http") ? image.url : `${apiBase}${image.url}`;
+  }
+  if (!image.filename) return null;
+  const path = image.prefix ? `${image.prefix}/${image.filename}` : image.filename;
+  return `${apiBase}/api/media/file/${path.split("/").map(encodeURIComponent).join("/")}`;
+}
 const PLANET_CORNER_RESTAURANT_ID = "6a0c309cc802dc1b90cf0bbb"; // ← add this
 
 const categoryLabels = {
@@ -258,11 +268,10 @@ function useMenuItems() {
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
       setItems((data.docs || []).map(doc => {
-        let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-        if (doc.image?.url)
-          imgUrl = doc.image.url.startsWith("http") ? doc.image.url : `${PAYLOAD_API}${doc.image.url}`;
-       
-
+        const uploaded = menuImageUrl(doc.image, PAYLOAD_API);
+        const categoryFallback =
+          FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
+        const imgUrl = uploaded || categoryFallback;
 
         return {
           id:          doc.id,
@@ -274,7 +283,7 @@ function useMenuItems() {
           category:    doc.category,
           cuisine:     categoryLabels[doc.category] || doc.category,
           img:         imgUrl,
-          fallbackImg: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
+          fallbackImg: uploaded ? FALLBACK_IMAGES["default"] : categoryFallback,
         };
       }));
     } catch (err) {
@@ -367,7 +376,11 @@ function MenuSection({ toastShow }) {
                   src={item.img}
                   alt={item.name}
                   loading="lazy"
-                  onError={e => { e.target.src = item.fallbackImg; }}
+                  onError={e => {
+                    const src = item.img || "";
+                    if (src.includes("/api/media/file/") || src.includes("amazonaws.com/")) return;
+                    e.target.src = item.fallbackImg;
+                  }}
                 />
               </div>
               <button

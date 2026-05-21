@@ -1,8 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
-const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3001";
 const FRONTEND_ORIGIN = "http://localhost:5173";
+
+function menuImageUrl(image, apiBase) {
+  if (!image?.url && !image?.filename) return null;
+  if (image.url && !image.url.includes("undefined.s3.")) {
+    return image.url.startsWith("http") ? image.url : `${apiBase}${image.url}`;
+  }
+  if (!image.filename) return null;
+  const path = image.prefix ? `${image.prefix}/${image.filename}` : image.filename;
+  return `${apiBase}/api/media/file/${path.split("/").map(encodeURIComponent).join("/")}`;
+}
 
 // ─── CATEGORY DATA ────────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -383,17 +393,17 @@ function useMenuItems() {
       const data = await res.json();
 
       const mapped = (data.docs || []).map(doc => {
-        let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-        if (doc.image) {
-          if (doc.image?.url) imgUrl = doc.image.url.startsWith("http") ? doc.image.url : `${PAYLOAD_API}${doc.image.url}`;
-        }
+        const uploaded = menuImageUrl(doc.image, PAYLOAD_API);
+        const categoryFallback =
+          FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
+        const imgUrl = uploaded || categoryFallback;
         return {
           id: doc.id, name: doc.name, description: doc.description || "",
           price: `₹${doc.price}`, veg: doc.veg, isPopular: doc.isPopular,
           category: doc.category,
           cuisineLabel: CATEGORY_MAP[doc.category]?.label || doc.category,
           img: imgUrl,
-          fallback: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
+          fallback: uploaded ? FALLBACK_IMAGES["default"] : categoryFallback,
         };
       });
       setItems(mapped);
@@ -431,7 +441,14 @@ function SmartImg({ src, fallback, alt, className }) {
           : "none",
       }}
       onLoad={() => setLoaded(true)}
-      onError={() => { if (imgSrc !== fallback) { setImgSrc(fallback); setLoaded(false); } else setLoaded(true); }}
+      onError={() => {
+        if (src?.includes("/api/media/file/") || src?.includes("amazonaws.com/")) {
+          setLoaded(true);
+          return;
+        }
+        if (imgSrc !== fallback) { setImgSrc(fallback); setLoaded(false); }
+        else setLoaded(true);
+      }}
     />
   );
 }
