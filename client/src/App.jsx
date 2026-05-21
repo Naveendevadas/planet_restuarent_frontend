@@ -382,26 +382,14 @@ function useMenuItems() {
 
       const mapped = (data.docs || []).map((doc) => {
         let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-       if (doc.image) {
- if (doc.image) {
-  if (doc.image?.url) {
-    imgUrl = doc.image.url.startsWith("http")
-      ? doc.image.url
-      : `${PAYLOAD_API}${doc.image.url}`;
-  } else if (doc.image?.filename) {
-    imgUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${doc.image.filename}`;
-  } else if (typeof doc.image === "string") {
-    // ID only — fetch from media API and get the url field
-    try {
-      const mediaRes = await fetch(`${PAYLOAD_API}/api/media/${doc.image}?depth=0`);
-      const mediaDoc = await mediaRes.json();
-      imgUrl = mediaDoc?.url || imgUrl;
-    } catch {
-      // keep fallback
-    }
-  }
-}
-}
+        
+      // ✅ REPLACE WITH THIS
+         if (doc.image?.url) {
+           imgUrl = doc.image.url.startsWith("http")
+             ? doc.image.url
+             : `${PAYLOAD_API}${doc.image.url}`;
+         }
+
         return {
           id:          doc.id,
           name:        doc.name,

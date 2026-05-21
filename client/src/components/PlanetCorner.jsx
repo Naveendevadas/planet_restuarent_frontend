@@ -261,8 +261,9 @@ function useMenuItems() {
         let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
         if (doc.image?.url)
           imgUrl = doc.image.url.startsWith("http") ? doc.image.url : `${PAYLOAD_API}${doc.image.url}`;
-        else if (doc.image?.filename)
-          imgUrl = `${PAYLOAD_API}/media/${doc.image.filename}`;
+       
+
+
         return {
           id:          doc.id,
           name:        doc.name,
