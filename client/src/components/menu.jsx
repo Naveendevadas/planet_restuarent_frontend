@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -14,21 +14,7 @@ function menuImageUrl(image, apiBase) {
   return `${apiBase}/api/media/file/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-// ─── CATEGORY DATA ────────────────────────────────────────────────────────────
-const CATEGORIES = [
-  { value: "all",          label: "All Items",       icon: "🍽️" },
-  { value: "kerala",       label: "Kerala Specials",  icon: "🌴" },
-  { value: "biryani",      label: "Biryani & Rice",   icon: "🍚" },
-  { value: "starters",     label: "Starters",         icon: "🥗" },
-  { value: "north-indian", label: "North Indian",     icon: "🫕" },
-  { value: "chinese",      label: "Chinese",          icon: "🥢" },
-  { value: "continental",  label: "Continental",      icon: "🍝" },
-  { value: "seafood",      label: "Seafood",          icon: "🦐" },
-  { value: "desserts",     label: "Desserts",         icon: "🍰" },
-];
-
-const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.value, c]));
-
+// ─── FALLBACK IMAGES per category ────────────────────────────────────────────
 const FALLBACK_IMAGES = {
   "kerala":       "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=400&q=80",
   "biryani":      "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=400&q=80",
@@ -39,6 +25,18 @@ const FALLBACK_IMAGES = {
   "chinese":      "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=400&q=80",
   "continental":  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=80",
   "default":      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80",
+};
+
+// ─── CATEGORY ICONS (optional mapping, fallback to 🍽️) ───────────────────────
+const CATEGORY_ICONS = {
+  "kerala":       "🌴",
+  "biryani":      "🍚",
+  "starters":     "🥗",
+  "north-indian": "🫕",
+  "chinese":      "🥢",
+  "continental":  "🍝",
+  "seafood":      "🦐",
+  "desserts":     "🍰",
 };
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
@@ -103,7 +101,7 @@ const styles = `
   .mp-item-count { font-size: 0.8rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
   .nav-logo-img { height: 51px; width: auto; object-fit: contain; }
 
-  /* ── SLIM HERO (no bg image, just a header strip, fixed) ── */
+  /* ── SLIM HERO ── */
   .mp-hero {
     position: fixed;
     top: var(--nav-h);
@@ -124,7 +122,7 @@ const styles = `
   .mp-hero-title em { font-style: normal; background: linear-gradient(135deg,#f0b429,#fce08a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   .mp-hero-sub { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-left: 0.5rem; }
 
-  /* ── BODY BELOW FIXED HEADERS ── */
+  /* ── BODY ── */
   .mp-body {
     margin-top: var(--top-h);
     display: flex;
@@ -132,7 +130,7 @@ const styles = `
     overflow: hidden;
   }
 
-  /* ── SIDEBAR (fixed, full height, only its own scroll) ── */
+  /* ── SIDEBAR ── */
   .mp-sidebar {
     width: 260px;
     flex-shrink: 0;
@@ -170,7 +168,7 @@ const styles = `
   .mp-cat-btn.active .mp-cat-count { background: var(--gold); color: var(--green-dark); }
   .mp-sidebar-divider { height: 1px; background: rgba(240,180,41,0.08); margin: 1rem 0.6rem; }
 
-  /* veg filter in sidebar */
+  /* veg filter */
   .mp-veg-filter { padding: 0 0.6rem; margin-top: 0.5rem; }
   .mp-veg-filter-label { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 0.8rem; }
   .mp-veg-toggle {
@@ -193,19 +191,13 @@ const styles = `
   .mp-veg-toggle.active .mp-toggle-dot { background: rgba(74,222,128,0.3); }
   .mp-veg-toggle.active .mp-toggle-dot::after { left: 14px; background: #4ade80; }
 
-  /* ── MAIN CONTENT AREA ── */
+  /* ── MAIN CONTENT ── */
   .mp-content-wrap {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    flex: 1; display: flex; flex-direction: column;
+    height: 100%; overflow: hidden;
   }
-
-  /* Search + Sort + Results — sticky, never moves */
   .mp-content-header {
-    flex-shrink: 0;
-    padding: 1rem 3rem 1rem;
+    flex-shrink: 0; padding: 1rem 3rem 1rem;
     background: var(--green-dark);
     border-bottom: 1px solid rgba(240,180,41,0.07);
   }
@@ -228,8 +220,6 @@ const styles = `
   }
   .mp-sort:focus { border-color: var(--gold); }
   .mp-sort option { background: #0f2118; }
-
-  /* Results bar */
   .mp-results-bar { display: flex; align-items: center; justify-content: space-between; }
   .mp-results-text { font-size: 0.8rem; color: rgba(255,255,255,0.35); letter-spacing: 0.5px; }
   .mp-results-text span { color: var(--gold); font-weight: 500; }
@@ -243,17 +233,16 @@ const styles = `
   .mp-view-btn.active { background: rgba(240,180,41,0.12); border-color: rgba(240,180,41,0.3); color: var(--gold); }
   .mp-view-btn:hover { color: #fff; }
 
-  /* ── SCROLLABLE DISHES AREA ONLY ── */
+  /* ── SCROLL AREA ── */
   .mp-scroll-area {
-    flex: 1;
-    overflow-y: auto;
+    flex: 1; overflow-y: auto;
     padding: 2rem 3.5rem 3rem;
     scrollbar-width: thin; scrollbar-color: rgba(240,180,41,0.15) transparent;
   }
   .mp-scroll-area::-webkit-scrollbar { width: 4px; }
   .mp-scroll-area::-webkit-scrollbar-thumb { background: rgba(240,180,41,0.2); border-radius: 4px; }
 
-  /* Category section heading */
+  /* ── SECTION ── */
   .mp-section { margin-bottom: 3.5rem; animation: fadeSlideUp 0.5s ease both; }
   .mp-section-head {
     display: flex; align-items: center; gap: 1rem;
@@ -264,13 +253,11 @@ const styles = `
   .mp-section-title { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: #fff; }
   .mp-section-count { font-size: 0.75rem; background: rgba(240,180,41,0.1); color: var(--gold); padding: 3px 10px; border-radius: 50px; letter-spacing: 1px; margin-left: auto; }
 
-  /* ── GRID VIEW ── */
+  /* ── GRID / LIST ── */
   .mp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
-
-  /* ── LIST VIEW ── */
   .mp-list { display: flex; flex-direction: column; gap: 1rem; }
 
-  /* ── CARD (GRID) ── */
+  /* ── CARD GRID ── */
   .mp-card-grid {
     background: linear-gradient(160deg, var(--card) 0%, #152219 100%);
     border: 1px solid rgba(240,180,41,0.1); border-radius: 20px;
@@ -304,7 +291,7 @@ const styles = `
   .mp-card-tag.veg { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
   .mp-card-tag.nonveg { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
 
-  /* ── CARD (LIST) ── */
+  /* ── CARD LIST ── */
   .mp-card-list {
     display: flex; gap: 1.2rem; align-items: center;
     background: linear-gradient(135deg, var(--card) 0%, #152219 100%);
@@ -376,6 +363,26 @@ const styles = `
   }
 `;
 
+// ─── DYNAMIC CATEGORIES HOOK ──────────────────────────────────────────────────
+// Builds category list purely from fetched items — no hardcoding needed
+function useCategories(items) {
+  return useMemo(() => {
+    const seen = new Set();
+    const result = [{ value: "all", label: "All Items", icon: "🍽️" }];
+    items.forEach(item => {
+      if (item.category && !seen.has(item.category)) {
+        seen.add(item.category);
+        result.push({
+          value: item.category,
+          label: item.cuisineLabel || item.category, // label comes from backend
+          icon:  CATEGORY_ICONS[item.category] || "🍽️",
+        });
+      }
+    });
+    return result;
+  }, [items]);
+}
+
 // ─── HOOKS ───────────────────────────────────────────────────────────────────
 function useMenuItems() {
   const [items,   setItems]   = useState([]);
@@ -394,16 +401,19 @@ function useMenuItems() {
 
       const mapped = (data.docs || []).map(doc => {
         const uploaded = menuImageUrl(doc.image, PAYLOAD_API);
-        const categoryFallback =
-          FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
+        const categoryFallback = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
         const imgUrl = uploaded || categoryFallback;
         return {
-          id: doc.id, name: doc.name, description: doc.description || "",
-          price: `₹${doc.price}`, veg: doc.veg, isPopular: doc.isPopular,
-          category: doc.category,
-          cuisineLabel: CATEGORY_MAP[doc.category]?.label || doc.category,
-          img: imgUrl,
-          fallback: uploaded ? FALLBACK_IMAGES["default"] : categoryFallback,
+          id:           doc.id,
+          name:         doc.name,
+          description:  doc.description || "",
+          price:        `₹${doc.price}`,
+          veg:          doc.veg,
+          isPopular:    doc.isPopular,
+          category:     doc.category,
+          cuisineLabel: doc.cuisineLabel || doc.category, // use backend label if available
+          img:          imgUrl,
+          fallback:     uploaded ? FALLBACK_IMAGES["default"] : categoryFallback,
         };
       });
       setItems(mapped);
@@ -506,9 +516,15 @@ export default function MenuPage() {
   const [view,           setView]           = useState("grid");
   const [sort,           setSort]           = useState("default");
 
+  // ✅ All hooks called inside the component
   const { items, loading, error, refetch } = useMenuItems();
+  const CATEGORIES = useCategories(items);
+  const CATEGORY_MAP = useMemo(
+    () => Object.fromEntries(CATEGORIES.map(c => [c.value, c])),
+    [CATEGORIES]
+  );
 
-  // Count per category (respects filters)
+  // Count per category
   const countFor = (cat) => {
     let list = cat === "all" ? items : items.filter(i => i.category === cat);
     if (vegOnly) list = list.filter(i => i.veg);
@@ -519,8 +535,8 @@ export default function MenuPage() {
     return list.length;
   };
 
-  // Filtered + sorted master list
-  const filtered = (() => {
+  // Filtered + sorted list
+  const filtered = useMemo(() => {
     let list = activeCategory === "all" ? items : items.filter(i => i.category === activeCategory);
     if (vegOnly) list = list.filter(i => i.veg);
     if (search.trim()) {
@@ -536,33 +552,40 @@ export default function MenuPage() {
     if (sort === "popular")    list = [...list].sort((a, b) => (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0));
     if (sort === "name")       list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  })();
+  }, [items, activeCategory, vegOnly, search, sort]);
 
   // Group by category for "all" view
-  const grouped = (() => {
+  const grouped = useMemo(() => {
     if (activeCategory !== "all") {
-      const cat = CATEGORY_MAP[activeCategory];
+      const cat = CATEGORY_MAP[activeCategory] || { value: activeCategory, label: activeCategory, icon: "🍽️" };
       return [{ cat, items: filtered }];
     }
-    return CATEGORIES.filter(c => c.value !== "all").map(cat => ({
-      cat,
-      items: filtered.filter(i => i.category === cat.value),
-    })).filter(g => g.items.length > 0);
-  })();
+    // build groups from actual categories in filtered items
+    const seen = new Set();
+    const groups = [];
+    CATEGORIES.filter(c => c.value !== "all").forEach(cat => {
+      const groupItems = filtered.filter(i => i.category === cat.value);
+      if (groupItems.length > 0) {
+        seen.add(cat.value);
+        groups.push({ cat, items: groupItems });
+      }
+    });
+    return groups;
+  }, [filtered, activeCategory, CATEGORIES, CATEGORY_MAP]);
 
   const handleCatClick = (val) => {
     setActiveCategory(val);
     setSearch("");
   };
 
-  const activeCat = CATEGORY_MAP[activeCategory] || CATEGORY_MAP["all"];
+  const activeCat = CATEGORY_MAP[activeCategory] || { label: "All Items", icon: "🍽️" };
 
   return (
     <>
       <style>{styles}</style>
       <div className="mp">
 
-        {/* ── TOP NAV (fixed) ── */}
+        {/* ── TOP NAV ── */}
         <nav className="mp-nav">
           <a className="mp-logo" href="/">
             <img src="/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
@@ -575,26 +598,33 @@ export default function MenuPage() {
           </div>
         </nav>
 
-        {/* ── SLIM HERO HEADER (fixed, no bg image) ── */}
+        {/* ── HERO ── */}
         <div className="mp-hero">
           <div className="mp-hero-content">
             <span className="mp-hero-icon">{activeCat.icon}</span>
             <h1 className="mp-hero-title"><em>{activeCat.label}</em></h1>
             <span className="mp-hero-sub">
               {activeCategory === "all"
-                ? `${items.length}+ dishes across 8 cuisines`
+                ? `${items.length}+ dishes across ${CATEGORIES.length - 1} cuisines`
                 : `${countFor(activeCategory)} dishes available`}
             </span>
           </div>
         </div>
 
-        {/* ── BODY: sidebar + content side by side ── */}
+        {/* ── BODY ── */}
         <div className="mp-body">
 
-          {/* SIDEBAR */}
+          {/* SIDEBAR — 100% dynamic from backend */}
           <aside className="mp-sidebar">
             <p className="mp-sidebar-label">Cuisines</p>
-            {CATEGORIES.map(cat => (
+
+            {loading && (
+              <div style={{ padding: "1rem 0.6rem", color: "rgba(255,255,255,0.3)", fontSize: "0.8rem" }}>
+                Loading...
+              </div>
+            )}
+
+            {!loading && CATEGORIES.map(cat => (
               <button
                 key={cat.value}
                 className={`mp-cat-btn ${activeCategory === cat.value ? "active" : ""}`}
@@ -617,10 +647,9 @@ export default function MenuPage() {
             </div>
           </aside>
 
-          {/* RIGHT SIDE: fixed header + scrollable dishes */}
+          {/* CONTENT */}
           <div className="mp-content-wrap">
 
-            {/* Search + Sort + Results — NEVER SCROLLS */}
             <div className="mp-content-header">
               <div className="mp-search-row">
                 <div className="mp-search-wrap">
@@ -657,7 +686,6 @@ export default function MenuPage() {
               )}
             </div>
 
-            {/* ONLY THIS PART SCROLLS */}
             <div className="mp-scroll-area">
 
               {loading && (
@@ -706,6 +734,7 @@ export default function MenuPage() {
                   </div>
                 )
               ))}
+
             </div>
           </div>
         </div>
