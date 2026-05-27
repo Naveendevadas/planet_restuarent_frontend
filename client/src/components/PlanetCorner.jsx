@@ -691,7 +691,8 @@ const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap');
   *,::before,::after{margin:0;padding:0;box-sizing:border-box}
   :root{--green:#1a3828;--green-dark:#0f2118;--gold:#f0b429}
-  body{background:#0f2118}
+  body{background:#0f2118;margin:0;padding:0;overflow-x:hidden}
+#root{width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;text-align:left!important;border:none!important;box-sizing:border-box!important}
   .corner-site{background:#0f2118;color:#fff;font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 
   /* NAV */
