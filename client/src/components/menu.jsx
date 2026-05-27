@@ -309,7 +309,7 @@ function CategoryBlock({ cat, items, collapsed = false, onExpand }) {
   return (
     <div className="mp-category" id={`cat-${cat.value}`}>
       <div className="mp-category-header">
-        <span className="mp-category-icon">{cat.icon}</span>
+        {/* <span className="mp-category-icon">{cat.icon}</span> */}
         <span className="mp-category-name">{cat.label}</span>
         <span className="mp-category-count">{items.length} items</span>
       </div>
@@ -429,7 +429,7 @@ export default function MenuPage() {
                 data-cat="all"
                 onClick={() => selectCat("all")}
               >
-                🍽️ All
+                 All
               </button>
               {CATEGORIES.map(cat => (
                 <button
@@ -438,7 +438,7 @@ export default function MenuPage() {
                   data-cat={cat.value}
                   onClick={() => selectCat(cat.value)}
                 >
-                  {cat.icon} {cat.label}
+                   {cat.label}
                 </button>
               ))}
             </div>
@@ -455,7 +455,7 @@ export default function MenuPage() {
                 className={`mp-scat ${activeCat === "all" ? "active" : ""}`}
                 onClick={() => selectCat("all")}
               >
-                🍽️ All Items
+                 All Items
               </div>
               {CATEGORIES.map(cat => (
                 <div
@@ -463,7 +463,7 @@ export default function MenuPage() {
                   className={`mp-scat ${activeCat === cat.value ? "active" : ""}`}
                   onClick={() => selectCat(cat.value)}
                 >
-                  {cat.icon} {cat.label}
+                   {cat.label}
                 </div>
               ))}
             </div>

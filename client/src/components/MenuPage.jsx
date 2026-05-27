@@ -310,7 +310,7 @@ function CategoryBlock({ cat, items, collapsed = false, onExpand }) {
   return (
     <div className="mp-category" id={`cat-${cat}`}>
       <div className="mp-category-header">
-        <span className="mp-category-icon">{icon}</span>
+        {/* <span className="mp-category-icon">{icon}</span> */}
         <span className="mp-category-name">{label}</span>
         <span className="mp-category-count">{items.length} items</span>
       </div>
@@ -436,7 +436,7 @@ export default function MenuPage() {
                 data-cat="all"
                 onClick={() => selectCat("all")}
               >
-                🍽️ All
+                 All
               </button>
               {/* Category tabs */}
               {allCats.map(cat => (
@@ -446,7 +446,7 @@ export default function MenuPage() {
                   data-cat={cat}
                   onClick={() => selectCat(cat)}
                 >
-                  {categoryIcons[cat] || "🍴"} {categoryLabels[cat] || cat}
+                   {categoryLabels[cat] || cat}
                 </button>
               ))}
             </div>
@@ -463,7 +463,7 @@ export default function MenuPage() {
                 className={`mp-scat ${activeCat === "all" ? "active" : ""}`}
                 onClick={() => selectCat("all")}
               >
-                🍽️ All Items
+                 All Items
               </div>
               {allCats.map(cat => (
                 <div
@@ -471,7 +471,7 @@ export default function MenuPage() {
                   className={`mp-scat ${activeCat === cat ? "active" : ""}`}
                   onClick={() => selectCat(cat)}
                 >
-                  {categoryIcons[cat] || "🍴"} {categoryLabels[cat] || cat}
+                   {categoryLabels[cat] || cat}
                 </div>
               ))}
             </div>

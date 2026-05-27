@@ -81,7 +81,7 @@ const styles = `
   .corner-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(15,33,24,0.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(240,180,41,0.15)}
   .corner-nav .logo-wrap{display:flex;align-items:center;gap:12px}
   .corner-nav .logo-icon{width:42px;height:42px;background:#f0b429;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#0f2118;line-height:1.2;text-align:center;letter-spacing:-0.5px}
-  .corner-nav .logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#f0b429;letter-spacing:2px;display:block}
+  // .corner-nav .logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#f0b429;letter-spacing:2px;display:block}
   .corner-nav .logo-sub{font-size:0.6rem;color:rgba(240,180,41,0.7);letter-spacing:3px;text-transform:uppercase;display:block;margin-top:-2px}
   
   .back-btn{background:#f0b429;color:#0f2118;border:none;padding:0.6rem 1.4rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.88rem;cursor:pointer;transition:all 0.25s;letter-spacing:0.3px;position:relative;overflow:hidden}
@@ -439,7 +439,7 @@ function useMenuItems() {
           derived.push({
             value: doc.category,
             label: cfg?.label || doc.category.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
-            icon:  cfg?.icon  || "🍽️",
+            
           });
         }
       });
@@ -511,7 +511,7 @@ function MenuSection({ toastShow }) {
   className={`c-tab ${activeTab === "all" ? "active" : ""}`}
   onClick={() => setActiveTab("all")}
 >
-  <span>🍽️</span>
+  {/* <span>🍽️</span> */}
   All
 </button>
           {/* One tab per category that actually exists in this restaurant */}
@@ -620,16 +620,14 @@ export default function PlanetCorner() {
       <div className="corner-site">
 
         {/* NAV */}
-        <nav className="corner-nav">
-          <div className="logo-wrap">
-            <div className="logo-icon">PLANET<br/>CORNER</div>
-            <div>
-              <span className="logo-text">PLANET</span>
-              <span className="logo-sub">Corner — Kochi</span>
-            </div>
-          </div>
-          <button className="back-btn" onClick={() => navigate("/")}>Planet Multi Cuisine</button>
-        </nav>
+       {/* NAV */}
+<nav className="corner-nav">
+  <div className="logo-wrap">
+    <img src="/images/planet-logo-transparent (3).png" alt="Planet Corner Logo" style={{height: '43px', width: 'auto', objectFit: 'contain'}} />
+    <img src="/images/planet-corner-logo-transparent-1.png" alt="Planet Corner" style={{height: '43px', width: 'auto', objectFit: 'contain'}} />
+  </div>
+  <button className="back-btn" onClick={() => navigate("/")}>Planet Multi Cuisine</button>
+</nav>
 
         {/* HERO */}
         <section className="corner-hero">
@@ -654,7 +652,7 @@ export default function PlanetCorner() {
             The same world-class flavors you love at Planet — now closer to the heart of Kochi.
           </p>
 
-          <div className="hero-feature-strip">
+          {/* <div className="hero-feature-strip">
             <div className="hero-feature-item">
               <span className="hero-feature-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -690,14 +688,8 @@ export default function PlanetCorner() {
               </span>
               <span className="hero-feature-label">Pastries & More</span>
             </div>
-          </div>
-
-          <p className="hero-about-desc">
-            Planet Corner brings the same beloved experience to the vibrant streets of Elamkulam.
-            Every bite is crafted with the same love that made Planet a household name in Perumbavoor.
-          </p>
-
-          <a
+          </div> */}
+  <a
             className="hero-map-btn"
             href="https://www.google.com/maps/search/Elamkulam+Kochi+Kerala"
             target="_blank"
@@ -709,6 +701,12 @@ export default function PlanetCorner() {
             </svg>
             Open in Google Maps
           </a>
+          <p className="hero-about-desc">
+            Planet Corner brings the same beloved experience to the vibrant streets of Elamkulam.
+            Every bite is crafted with the same love that made Planet a household name in Perumbavoor.
+          </p>
+
+        
 
           <div className="hero-scroll-hint">
             <span>Scroll</span>
