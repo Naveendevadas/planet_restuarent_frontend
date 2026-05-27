@@ -1,4 +1,5 @@
 
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -408,13 +409,22 @@ function useMenuItems() {
       const mapped = docs.map(doc => {
         const uploaded = menuImageUrl(doc.image, PAYLOAD_API);
         const fallback = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-       return {
-  id: doc.id, name: doc.name, description: doc.description || "",
-  price: `₹${doc.price}`, veg: doc.veg, isDrink: doc.isDrink ?? false,
-  isPopular: doc.isPopular,
-  category: doc.category, cuisine: categoryLabels[doc.category] || doc.category,
-  img: imgUrl, fallbackImg: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
-};
+        return {
+          id:          doc.id,
+          name:        doc.name,
+          description: doc.description || "",
+          price:       `₹${doc.price}`,
+          veg:         doc.veg,
+          isDrink:     doc.isDrink ?? false,
+          isPopular:   doc.isPopular,
+          category:    doc.category,
+          // Use config label if known, else humanize the raw value
+          cuisine: CATEGORY_CONFIG[doc.category]?.label
+            || doc.category?.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+            || "Other",
+          img:         uploaded || fallback,
+          fallbackImg: fallback,
+        };
       });
 
       setItems(mapped);
