@@ -127,44 +127,57 @@ const styles = `
   .nav-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(240,180,41,0.4)}
   .nav-logo-img{height:51px;width:auto;object-fit:contain}
 
-  /* HERO */
-  .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:7rem 4rem 4rem;gap:3rem;position:relative;overflow:hidden;isolation:isolate}
-  .hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80');background-size:cover;background-position:center;filter:blur(8px) saturate(1.1);transform:scale(1.08);z-index:-3}
-  .hero-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(15,33,24,0.96) 0%,rgba(15,33,24,0.75) 45%,rgba(15,33,24,0.55) 100%),radial-gradient(circle at 80% 30%,rgba(240,180,41,0.18) 0%,transparent 55%),radial-gradient(circle at 20% 80%,rgba(240,180,41,0.08) 0%,transparent 50%);z-index:-2}
-  .hero-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.08;mix-blend-mode:overlay;z-index:-1;pointer-events:none}
-  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(240,180,41,0.14);border:1px solid rgba(240,180,41,0.35);padding:0.45rem 1.1rem;border-radius:50px;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:#f5c842;margin-bottom:1.5rem;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(240,180,41,0.1);animation:fadeSlideDown 0.8s ease both}
-  .hero-badge.closed{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:#f87171}
-  .badge-dot{width:6px;height:6px;background:#f0b429;border-radius:50%;display:inline-block;box-shadow:0 0 12px #f0b429;animation:pulse 1.8s infinite}
-  .hero-badge.closed .badge-dot{background:#f87171;box-shadow:0 0 12px #f87171}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-  @keyframes fadeSlideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeSlideLeft{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-  @keyframes floatTag{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-  @keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-  @keyframes toastOut{to{opacity:0;transform:translateY(10px)}}
+ /* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 5rem;position:relative;overflow:hidden;isolation:isolate}
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80');background-size:cover;background-position:center;transform:scale(1.05);z-index:-3;transition:transform 8s ease}
+.hero:hover .hero-bg{transform:scale(1.08)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,22,16,0.82) 0%,rgba(10,22,16,0.55) 40%,rgba(10,22,16,0.82) 100%);z-index:-2}
+.hero-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.06;mix-blend-mode:overlay;z-index:-1;pointer-events:none}
 
-  .hero h1{font-family:'Playfair Display',serif;font-size:4.2rem;line-height:1.05;font-weight:900;margin-bottom:1.2rem;text-shadow:0 4px 30px rgba(0,0,0,0.5);animation:fadeSlideUp 0.9s 0.2s ease both}
-  .hero h1 em{font-style:normal;display:block;background:linear-gradient(135deg,#f0b429 0%,#f5c842 50%,#fce08a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .hero-desc{color:rgba(255,255,255,0.75);font-size:1.05rem;line-height:1.7;max-width:440px;margin-bottom:2rem;text-shadow:0 2px 10px rgba(0,0,0,0.4);animation:fadeSlideUp 0.9s 0.35s ease both}
-  .hero-btns{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;animation:fadeSlideUp 0.9s 0.5s ease both}
-  .btn-primary{background:#f0b429;color:#0f2118;border:none;padding:0.9rem 2.1rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(240,180,41,0.25)}
-  .btn-primary:hover{background:#f5c842;transform:translateY(-3px);box-shadow:0 16px 40px rgba(240,180,41,0.5)}
-  .btn-ghost{background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:0.9rem 2.1rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;transition:all 0.25s;backdrop-filter:blur(10px)}
-  .btn-ghost:hover{border-color:#f0b429;color:#f0b429;background:rgba(240,180,41,0.08);transform:translateY(-3px)}
-  .arrow-icon{width:22px;height:22px;background:#0f2118;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem}
-  .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;animation:fadeSlideLeft 1s 0.4s ease both}
-  .food-plate{width:400px;height:400px;border-radius:50%;background:#0f2118;border:3px solid rgba(240,180,41,0.3);display:flex;align-items:center;justify-content:center;position:relative;animation:float 4s ease-in-out infinite;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.5),0 0 0 8px rgba(15,33,24,0.6),0 0 0 9px rgba(240,180,41,0.2)}
-  .food-plate::before{content:'';position:absolute;inset:-30px;border-radius:50%;border:1px dashed rgba(240,180,41,0.3);animation:spin 30s linear infinite;pointer-events:none}
-  .food-plate::after{content:'';position:absolute;inset:-55px;border-radius:50%;border:1px dashed rgba(240,180,41,0.12);animation:spin 45s linear infinite reverse;pointer-events:none}
-  .food-plate-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
-  .float-tag{position:absolute;background:rgba(26,40,32,0.85);border:1px solid rgba(240,180,41,0.35);border-radius:14px;padding:0.7rem 1.1rem;display:flex;align-items:center;gap:8px;font-size:0.8rem;backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
-  .float-tag .dot{width:8px;height:8px;border-radius:50%;background:#f0b429;flex-shrink:0;box-shadow:0 0 10px #f0b429}
-  .tag1{top:40px;left:-30px;animation:floatTag 3.5s ease-in-out infinite}
-  .tag2{bottom:60px;right:-40px;animation:floatTag 3.5s ease-in-out infinite 1.5s}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(240,180,41,0.12);border:1px solid rgba(240,180,41,0.4);padding:0.5rem 1.3rem;border-radius:50px;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:#f5c842;margin-bottom:2rem;backdrop-filter:blur(10px);animation:fadeSlideDown 0.8s ease both}
+.hero-badge.closed{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:#f87171}
+.badge-dot{width:6px;height:6px;background:#f0b429;border-radius:50%;display:inline-block;box-shadow:0 0 12px #f0b429;animation:pulse 1.8s infinite}
+.hero-badge.closed .badge-dot{background:#f87171;box-shadow:0 0 12px #f87171}
+
+.hero-eyebrow{font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:rgba(240,180,41,0.7);margin-bottom:1.2rem;font-weight:400;animation:fadeSlideDown 0.8s 0.1s ease both}
+.hero h1{font-family:'Playfair Display',serif;font-size:5rem;line-height:1.05;font-weight:900;margin-bottom:1.4rem;animation:fadeSlideUp 0.9s 0.2s ease both;max-width:820px}
+.hero h1 em{font-style:normal;display:block;font-size:2.2rem;font-weight:400;letter-spacing:2px;background:linear-gradient(135deg,#f0b429 0%,#fce08a 50%,#f0b429 100%);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite,fadeSlideUp 0.9s 0.3s ease both;margin-top:0.6rem}
+.hero-desc{color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.8;max-width:560px;margin:0 auto 2.5rem;animation:fadeSlideUp 0.9s 0.35s ease both}
+
+.hero-divider{width:60px;height:2px;background:linear-gradient(90deg,transparent,#f0b429,transparent);margin:0 auto 2.5rem;animation:fadeSlideUp 0.9s 0.3s ease both}
+
+.hero-btns{display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap;animation:fadeSlideUp 0.9s 0.5s ease both;margin-bottom:3.5rem}
+.btn-primary{background:#f0b429;color:#0f2118;border:none;padding:0.95rem 2.4rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.95rem;cursor:pointer;transition:all 0.3s;letter-spacing:0.5px;box-shadow:0 8px 30px rgba(240,180,41,0.35)}
+.btn-primary:hover{background:#f5c842;transform:translateY(-3px);box-shadow:0 16px 40px rgba(240,180,41,0.5)}
+.btn-ghost{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.35);padding:0.95rem 2.4rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(10px);letter-spacing:0.5px}
+.btn-ghost:hover{border-color:#f0b429;color:#f0b429;background:rgba(240,180,41,0.08);transform:translateY(-3px)}
+
+.hero-cuisine-strip{display:flex;align-items:center;justify-content:center;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(240,180,41,0.15);border-radius:60px;padding:0.4rem;backdrop-filter:blur(12px);animation:fadeSlideUp 0.9s 0.6s ease both;flex-wrap:wrap}
+.cuisine-pill{display:flex;align-items:center;gap:8px;padding:0.6rem 1.4rem;border-radius:50px;font-size:0.78rem;color:rgba(255,255,255,0.75);font-weight:400;letter-spacing:0.5px;transition:all 0.3s;white-space:nowrap}
+.cuisine-pill:hover{background:rgba(240,180,41,0.12);color:#f0b429}
+.cuisine-pill-icon{font-size:1.1rem}
+.cuisine-sep{width:1px;height:20px;background:rgba(240,180,41,0.2);flex-shrink:0}
+
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0.4;animation:fadeSlideUp 1s 1s ease both;cursor:pointer}
+.hero-scroll span{font-size:0.6rem;letter-spacing:3px;text-transform:uppercase}
+.hero-scroll-arrow{width:22px;height:22px;border-right:1.5px solid #f0b429;border-bottom:1.5px solid #f0b429;transform:rotate(45deg);animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+
+/* HERO MOBILE */
+@media(max-width:768px){
+  .hero{padding:6rem 1.5rem 4rem}
+  .hero h1{font-size:2.6rem}
+  .hero h1 em{font-size:1.4rem}
+  .hero-desc{font-size:0.92rem}
+  .hero-btns{flex-direction:column;align-items:center}
+  .btn-primary,.btn-ghost{width:100%;max-width:280px;justify-content:center}
+  .hero-cuisine-strip{gap:0.3rem;border-radius:20px;padding:0.4rem}
+  .cuisine-sep{display:none}
+  .cuisine-pill{padding:0.4rem 0.8rem;font-size:0.72rem}
+}
+@media(max-width:400px){
+  .hero h1{font-size:2rem}
+}
 
   /* STATS */
   .stats{display:flex;border-top:1px solid rgba(240,180,41,0.1);border-bottom:1px solid rgba(240,180,41,0.1)}
@@ -307,95 +320,139 @@ const styles = `
   /* ══════════════════════════════════════════
      FULLY RESPONSIVE — mobile & tablet
   ══════════════════════════════════════════ */
-  @media(max-width:1024px){
-    .menu-grid{grid-template-columns:repeat(3,1fr)}
-    .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
-    .footer-brand{grid-column:1/-1}
-    .features-grid{grid-template-columns:repeat(2,1fr)}
+/* ── 1024px ── */
+@media(max-width:1024px){
+  .menu-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .footer-brand{grid-column:1/-1}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── 768px ── */
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav-links{display:none}
+  .nav-logo-img{height:34px}
+  .nav-btn{font-size:0.75rem;padding:0.45rem 0.9rem;letter-spacing:0}
+  .hero{padding:6rem 1.5rem 4rem}
+  .hero h1{font-size:2.6rem}
+  .hero h1 em{font-size:1.4rem}
+  .hero-desc{font-size:0.92rem}
+  .hero-btns{flex-direction:column;align-items:center}
+  .btn-primary,.btn-ghost{width:100%;max-width:280px;justify-content:center}
+  .hero-badge{font-size:0.65rem;padding:0.4rem 0.9rem;letter-spacing:1px;text-align:center;white-space:normal;line-height:1.4}
+  .hero-cuisine-strip{gap:0.3rem;border-radius:20px;padding:0.4rem}
+  .cuisine-sep{display:none}
+  .cuisine-pill{padding:0.4rem 0.8rem;font-size:0.72rem}
+  .stats{flex-wrap:wrap}
+  .stat{min-width:50%;padding:0.8rem 0.5rem}
+  .stat-num{font-size:1.4rem}
+  .stat-label{font-size:0.65rem}
+  .section{padding:3rem 1.5rem;overflow:visible}
+  .section-header{flex-direction:column;gap:0.8rem;align-items:flex-start}
+  .section-title{font-size:2rem}
+  .section-desc{text-align:left;max-width:100%}
+  .menu-tabs{gap:0.4rem;margin-bottom:2rem}
+  .tab{font-size:0.78rem;padding:0.4rem 0.9rem}
+
+  /* MENU GRID — 2 columns, absolute image */
+  .menu-grid{
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+    row-gap:100px;
+    padding-top:70px;
+    margin-top:0;
   }
-
-  @media(max-width:768px){
-    /* NAV */
-    .nav{padding:0.75rem 1rem}
-.nav-links{display:none}
-.nav-logo-img{height:34px}
-.nav-btn{font-size:0.75rem;padding:0.45rem 0.9rem;letter-spacing:0}
-
-    /* HERO */
-    .hero{grid-template-columns:1fr;padding:5.5rem 1.5rem 3rem;text-align:center;min-height:auto}
-    .hero-visual{display:none}
-    .hero h1{font-size:2.2rem;line-height:1.1;word-break:break-word}
-    .hero h1 em{font-size:inherit}
-    .hero-desc{font-size:0.95rem;max-width:100%;margin-left:auto;margin-right:auto}
-    .hero-btns{justify-content:center;flex-direction:column;align-items:center;gap:0.8rem}
-    .btn-primary,.btn-ghost{width:100%;max-width:280px;justify-content:center}
-    .hero-badge{font-size:0.65rem;padding:0.4rem 0.9rem;letter-spacing:1px;text-align:center;white-space:normal;line-height:1.4}
-
-    /* STATS */
-   .stats{flex-wrap:wrap}
-.stat{min-width:50%;padding:0.8rem 0.5rem}
-.stat-num{font-size:1.4rem}
-.stat-label{font-size:0.65rem}
-
-    /* SECTION */
-    .section{padding:3rem 1.5rem}
-    .section-header{flex-direction:column;gap:0.8rem;align-items:flex-start}
-    .section-title{font-size:2rem}
-    .section-desc{text-align:left;max-width:100%}
-
-    /* MENU TABS */
-    .menu-tabs{gap:0.4rem;margin-bottom:3rem}
-    .tab{font-size:0.78rem;padding:0.4rem 0.9rem}
-
-    /* MENU GRID */
-    .menu-grid{grid-template-columns:1fr 1fr;padding-top:4.5rem;row-gap:5rem;gap:1rem}
-    .menu-card{padding:4.5rem 0.8rem 1.2rem}
-    .plate-img-wrap{width:110px;height:110px;top:-50px}
-    .card-name{font-size:1rem}
-    .card-desc{font-size:0.75rem;min-height:auto}
-    .menu-price{font-size:1.2rem}
-
-    /* STORY */
-    .story{padding:3rem 1.5rem}
-    .story-grid{grid-template-columns:1fr;gap:2rem}
-    .story-visual{height:260px}
-    .story h2{font-size:1.8rem}
-    .story-pillars{grid-template-columns:1fr}
-
-    /* FEATURES */
-    .features{padding:3rem 1.5rem}
-    .features-grid{grid-template-columns:1fr;gap:1.2rem}
-
-    /* GALLERY — single column stack on mobile */
-    .gallery-grid{
-      grid-template-columns:1fr 1fr;
-      grid-template-rows:160px 160px 160px;
-    }
-    .gal-item:first-child{grid-row:span 1;grid-column:span 2}
-
-    /* BRANCHES */
-    .branches{padding:3rem 1.5rem}
-    .branches-grid{grid-template-columns:1fr}
-
-    /* FOOTER */
-    footer{padding:3rem 1.5rem 0}
-    .footer-grid{grid-template-columns:1fr;gap:2rem}
-    .footer-brand{grid-column:auto}
-    .footer-bottom{flex-direction:column;text-align:center;gap:1rem}
-
-    /* TOAST */
-    .toast{right:1rem;left:1rem;bottom:1rem}
+  .menu-card{
+    position:relative;
+    padding:65px 0.8rem 1.2rem;
+    overflow:visible;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    border-radius:22px;
   }
-
-  @media(max-width:400px){
-    .hero h1{font-size:1.8rem}
-    .section-title{font-size:1.7rem}
-    .menu-grid{grid-template-columns:1fr}
-    .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto}
-    .gal-item{height:180px}
-    .gal-item:first-child{grid-column:span 1}
-    .stat{min-width:50%}
+  .plate-img-wrap{
+    position:absolute !important;
+    top:-55px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:110px !important;
+    height:110px !important;
+    margin:0 !important;
   }
+  .menu-card:hover .plate-img-wrap{
+    transform:translateX(-50%) translateY(-6px) scale(1.08) !important;
+  }
+  .card-name{font-size:1rem}
+  .card-desc{font-size:0.73rem;min-height:auto}
+  .menu-price{font-size:1.1rem}
+  .heart-btn{top:0.5rem;right:0.5rem;width:28px;height:28px;font-size:0.8rem}
+  .popular-tag{top:0.5rem;left:0.5rem;font-size:0.55rem}
+
+  .story{padding:3rem 1.5rem}
+  .story-grid{grid-template-columns:1fr;gap:2rem}
+  .story-visual{height:260px}
+  .story h2{font-size:1.8rem}
+  .story-pillars{grid-template-columns:1fr}
+  .features{padding:3rem 1.5rem}
+  .features-grid{grid-template-columns:1fr;gap:1.2rem}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:160px 160px 160px}
+  .gal-item:first-child{grid-row:span 1;grid-column:span 2}
+  .branches{padding:3rem 1.5rem}
+  .branches-grid{grid-template-columns:1fr}
+  footer{padding:3rem 1.5rem 0}
+  .footer-grid{grid-template-columns:1fr;gap:2rem}
+  .footer-brand{grid-column:auto}
+  .footer-bottom{flex-direction:column;text-align:center;gap:1rem}
+  .toast{right:1rem;left:1rem;bottom:1rem}
+}
+
+/* ── 480px — single column ── */
+@media(max-width:480px){
+  .hero h1{font-size:1.8rem}
+  .section-title{font-size:1.7rem}
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto}
+  .gal-item{height:180px}
+  .gal-item:first-child{grid-column:span 1}
+  .stat{min-width:50%}
+
+  .menu-grid{
+    grid-template-columns:1fr !important;
+    gap:0;
+    row-gap:100px;
+    padding-top:70px;
+    margin-top:0;
+  }
+  .menu-card{
+    position:relative;
+    padding:65px 1rem 1.2rem;
+    overflow:visible;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    border-radius:20px;
+  }
+  .plate-img-wrap{
+    position:absolute !important;
+    top:-55px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:110px !important;
+    height:110px !important;
+    margin:0 !important;
+  }
+  .menu-card:hover .plate-img-wrap{
+    transform:translateX(-50%) translateY(-6px) scale(1.08) !important;
+  }
+  .card-name{font-size:1rem}
+  .card-desc{font-size:0.75rem;min-height:auto}
+  .menu-price{font-size:1.1rem}
+  .heart-btn{top:0.5rem;right:0.5rem;width:28px;height:28px;font-size:0.8rem}
+  .popular-tag{top:0.5rem;left:0.5rem;font-size:0.55rem}
+}
 `;
 
 // ─── HOOKS ───────────────────────────────────────────────────────────────────
@@ -572,7 +629,7 @@ function Navbar({ sectionRefs }) {
           </li>
         ))}
       </ul>
-      <button className="nav-btn" onClick={() => navigate("/corner")}>Planet Corner ↗</button>
+      <button className="nav-btn" onClick={() => navigate("/corner")}>Planet Corner</button>
     </nav>
   );
 }
@@ -585,37 +642,62 @@ function Hero({ isOpen, hoursText, statusLoading }) {
       <div className="hero-bg" aria-hidden="true" />
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
-      <div>
-        {!statusLoading && (
-          <div className={`hero-badge ${isOpen ? "" : "closed"}`}>
-            <span className="badge-dot" />
-            {isOpen ? `Now Open — Dine In & Takeaway · ${hoursText}` : "Currently Closed"}
-          </div>
-        )}
-       <h1>
-  Best Multi-Cuisine Restaurant in Kayamkulam
-  <em>Taste the World On One Plate</em>
-</h1>
-       <p className="hero-desc">
-  Planet Multi-Cuisine Restaurant in Kayamkulam
-  serves authentic Kerala, Arabian, Chinese,
-  Continental, and Indian dishes with premium
-  ambience, family dining, takeaway, and
-  unforgettable flavors.
-</p>
-        <div className="hero-btns">
-          <button className="btn-primary" onClick={() => navigate("/corner")}>
-            Visit Planet Corner <span className="arrow-icon">↗</span>
-          </button>
-          <button className="btn-ghost" onClick={() => navigate("/menu")}>Explore Menu</button>
+
+      {/* Status badge */}
+      {!statusLoading && (
+        <div className={`hero-badge ${isOpen ? "" : "closed"}`}>
+          <span className="badge-dot" />
+          {isOpen ? `Open Now · ${hoursText}` : "Currently Closed"}
         </div>
+      )}
+
+      <p className="hero-eyebrow">Planet Multi-Cuisine Restaurant · Kayamkulam</p>
+
+      <h1>
+        Where Every Meal
+        <em>Tells a Story</em>
+      </h1>
+
+      <div className="hero-divider" />
+
+      <p className="hero-desc">
+        From the spice trails of Kerala to the kitchens of the world —
+        authentic flavors, master chefs, and memories that last a lifetime.
+      </p>
+
+      <div className="hero-btns">
+        <button className="btn-primary" onClick={() => navigate("/menu")}>
+          Explore Our Menu
+        </button>
+        <button className="btn-ghost" onClick={() => navigate("/corner")}>
+          Visit Planet Corner ↗
+        </button>
       </div>
-      <div className="hero-visual">
-        <div className="food-plate">
-          <img className="food-plate-img" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" alt="Best multi-cuisine food at Planet Restaurant Kayamkulam" />
-        </div>
-        <div className="float-tag tag1"><span className="dot" /> Chef's Special Today</div>
-        <div className="float-tag tag2"><span className="dot" /> 4.9 ★ Rated Restaurant</div>
+
+      {/* Cuisine strip */}
+      <div className="hero-cuisine-strip">
+        {[
+          { icon: "🌴", label: "Kerala" },
+          { icon: "🍚", label: "Biryani" },
+          { icon: "🦞", label: "Seafood" },
+          { icon: "🍛", label: "North Indian" },
+          { icon: "🥡", label: "Chinese" },
+          { icon: "🍽️", label: "Continental" },
+        ].map((c, i, arr) => (
+          <>
+            <div className="cuisine-pill" key={c.label}>
+              <span className="cuisine-pill-icon">{c.icon}</span>
+              {c.label}
+            </div>
+            {i < arr.length - 1 && <div className="cuisine-sep" key={`sep-${i}`} />}
+          </>
+        ))}
+      </div>
+
+      {/* Scroll hint */}
+      <div className="hero-scroll">
+        <span>Scroll</span>
+        <div className="hero-scroll-arrow" />
       </div>
     </section>
   );
