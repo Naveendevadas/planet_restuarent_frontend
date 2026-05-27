@@ -678,17 +678,17 @@ function Hero({ isOpen, hoursText, statusLoading }) {
       {/* Cuisine strip */}
       <div className="hero-cuisine-strip">
         {[
-          { icon: "🌴", label: "Kerala" },
-          { icon: "🍚", label: "Biryani" },
-          { icon: "🦞", label: "Seafood" },
-          { icon: "🍛", label: "North Indian" },
-          { icon: "🥡", label: "Chinese" },
-          { icon: "🍽️", label: "Continental" },
-        ].map((c, i, arr) => (
+          "Kerala" ,
+          "Biryani" ,
+         "Seafood" ,
+          "North Indian" ,
+          "Chinese" ,
+        "Continental" ,
+        ].map((label, i, arr) => (
           <>
-            <div className="cuisine-pill" key={c.label}>
-              <span className="cuisine-pill-icon">{c.icon}</span>
-              {c.label}
+            <div className="cuisine-pill" key={label}>
+              <span className="cuisine-pill-dot" />
+              {label}
             </div>
             {i < arr.length - 1 && <div className="cuisine-sep" key={`sep-${i}`} />}
           </>
