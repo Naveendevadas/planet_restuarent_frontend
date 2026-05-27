@@ -528,12 +528,13 @@ function useMenuItems() {
         if (doc.image?.url) {
           imgUrl = doc.image.url.startsWith("http") ? doc.image.url : `${PAYLOAD_API}${doc.image.url}`;
         }
-        return {
-          id: doc.id, name: doc.name, description: doc.description || "",
-          price: `₹${doc.price}`, veg: doc.veg, isPopular: doc.isPopular,
-          category: doc.category, cuisine: categoryLabels[doc.category] || doc.category,
-          img: imgUrl, fallbackImg: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
-        };
+ return {
+  id: doc.id, name: doc.name, description: doc.description || "",
+  price: `₹${doc.price}`, veg: doc.veg, isDrink: doc.isDrink ?? false,
+  isPopular: doc.isPopular,
+  category: doc.category, cuisine: categoryLabels[doc.category] || doc.category,
+  img: imgUrl, fallbackImg: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
+};
       }));
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
