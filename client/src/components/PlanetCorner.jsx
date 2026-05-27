@@ -755,7 +755,7 @@ const styles = `
 
   /* MENU SECTION */
   .corner-menu-section{padding:5rem 4rem;background:#0f2118}
-  .menu-section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem}
+.menu-section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;width:100%}
   .section-label{font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;color:#f0b429;margin-bottom:0.5rem}
   .section-title{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;line-height:1.2}
   .menu-section-desc{color:rgba(255,255,255,0.45);font-size:0.9rem;max-width:280px;text-align:right;line-height:1.6}
@@ -834,7 +834,7 @@ const styles = `
     .hero-about-desc{font-size:0.88rem;padding:1rem 1.4rem}
     .corner-info{padding:3rem 1.5rem}.info-grid{grid-template-columns:1fr;gap:1.2rem}
     .corner-menu-section{padding:3rem 1.5rem}
-    .menu-section-header{flex-direction:column;gap:1rem}.menu-section-desc{text-align:left}
+.menu-section-header{flex-direction:column;align-items:flex-start;gap:1rem}.menu-section-desc{text-align:left;max-width:100%}
     .menu-grid{grid-template-columns:1fr 1fr;padding-top:5rem;row-gap:6rem;gap:1rem}
     .menu-card{padding:5rem 1rem 1.5rem}
     .plate-img-wrap{width:130px;height:130px;top:-60px}
