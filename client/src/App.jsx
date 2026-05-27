@@ -887,8 +887,8 @@ function Footer({ sectionRefs }) {
           <ul>
             <li><div className="footer-hours-badge"><span className="footer-hours-dot" /> Open Daily</div></li>
            <li style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500 }}><i className="fas fa-clock" /> 11:00 AM – 11:00 PM</li>
-<li><a href="..."><i className="fas fa-location-dot" /> Planet — Perumbavoor ↗</a></li>
-<li><a href="..."><i className="fas fa-location-dot" /> Planet Corner — Kochi ↗</a></li>
+<li><a href="..."><i className="fas fa-location-dot" /> Planet — Perumbavoor </a></li>
+<li><a href="..."><i className="fas fa-location-dot" /> Planet Corner — Kochi </a></li>
 <li><a href="tel:+919876543210"><i className="fas fa-phone" /> +91 98765 43210</a></li>
 <li><a href="tel:+918590411348"><i className="fas fa-phone" /> +91 85904 11348</a></li>
           </ul>
