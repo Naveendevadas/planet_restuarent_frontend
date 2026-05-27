@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3001";
 const FRONTEND_ORIGIN = "http://localhost:5173";
+const PLANET_MAIN_RESTAURANT_ID = "6a0bea7b41a1fafddaf26d7c";
 
 function menuImageUrl(image, apiBase) {
   if (!image?.url && !image?.filename) return null;
@@ -229,10 +230,10 @@ function useMenuItems() {
   const fetchMenu = async () => {
     setLoading(true); setError(null);
     try {
-      const res = await fetch(
-        `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=200`,
-        { headers: { "Content-Type": "application/json", "Origin": FRONTEND_ORIGIN }, mode: "cors", credentials: "include" }
-      );
+     const res = await fetch(
+  `${PAYLOAD_API}/api/menu?where[restaurants][in]=${PLANET_MAIN_RESTAURANT_ID}&where[available][equals]=true&depth=1&limit=200`,
+  { headers: { "Content-Type": "application/json" }, mode: "cors", credentials: "include" }
+);
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
       setItems((data.docs || []).map(doc => {

@@ -517,10 +517,11 @@ function useMenuItems() {
   const fetchMenu = async () => {
     setLoading(true); setError(null);
     try {
-      const res = await fetch(
-        `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
-        { headers: { "Content-Type": "application/json" }, mode: "cors" }
-      );
+      // ✅ Add restaurant filter
+const res = await fetch(
+  `${PAYLOAD_API}/api/menu?where[restaurants][in]=${PLANET_MAIN_RESTAURANT_ID}&where[available][equals]=true&depth=1&limit=100`,
+  { headers: { "Content-Type": "application/json" }, mode: "cors" }
+);
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
       setItems((data.docs || []).map(doc => {
