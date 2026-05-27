@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3001";
-const FRONTEND_ORIGIN = "http://localhost:5173";
+const PLANET_CORNER_RESTAURANT_ID = "6a0c309cc802dc1b90cf0bbb";
 
 function menuImageUrl(image, apiBase) {
   if (!image?.url && !image?.filename) return null;
@@ -14,27 +15,35 @@ function menuImageUrl(image, apiBase) {
   return `${apiBase}/api/media/file/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-const FALLBACK_IMAGES = {
-  "kerala":       "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=400&q=80",
-  "biryani":      "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=400&q=80",
-  "starters":     "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80",
-  "desserts":     "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=400&q=80",
-  "north-indian": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=400&q=80",
-  "seafood":      "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=400&q=80",
-  "chinese":      "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=400&q=80",
-  "continental":  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=80",
-  "default":      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80",
+const categoryLabels = {
+  "ice-cream": "Ice Creams",
+  "pastries":  "Pastries & Cakes",
+  "shakes":    "Milkshakes",
+  "desserts":  "Desserts",
+  "waffles":   "Waffles & Pancakes",
+  "coffee":    "Coffee & Hot Drinks",
+  "snacks":    "Snacks & Bites",
 };
 
-const CATEGORY_ICONS = {
-  "kerala":       "🌴",
-  "biryani":      "🍚",
-  "starters":     "🥗",
-  "north-indian": "🫕",
-  "chinese":      "🥢",
-  "continental":  "🍝",
-  "seafood":      "🦐",
-  "desserts":     "🍰",
+const categoryIcons = {
+  "ice-cream": "🍦",
+  "pastries":  "🧁",
+  "shakes":    "🥤",
+  "desserts":  "🍮",
+  "waffles":   "🥞",
+  "coffee":    "☕",
+  "snacks":    "🍿",
+};
+
+const FALLBACK_IMAGES = {
+  "ice-cream": "https://picsum.photos/seed/icecream/400/400",
+  "pastries":  "https://picsum.photos/seed/pastries/400/400",
+  "shakes":    "https://picsum.photos/seed/milkshake/400/400",
+  "desserts":  "https://picsum.photos/seed/desserts/400/400",
+  "waffles":   "https://picsum.photos/seed/waffles/400/400",
+  "coffee":    "https://picsum.photos/seed/coffee/400/400",
+  "snacks":    "https://picsum.photos/seed/snacks/400/400",
+  "default":   "https://picsum.photos/seed/food/400/400",
 };
 
 // ─── STYLES ──────────────────────────────────────────────────────────────────
@@ -54,7 +63,14 @@ const styles = `
     border-bottom:1px solid rgba(240,180,41,0.15);
   }
   .mp-nav .logo-wrap { display:flex; align-items:center; gap:12px }
-  .mp-nav .nav-logo-img { height:51px; width:auto; object-fit:contain; }
+  .mp-nav .logo-icon {
+    width:42px; height:42px; background:#f0b429; border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:9px; font-weight:700; color:#0f2118;
+    line-height:1.2; text-align:center; letter-spacing:-0.5px;
+  }
+  .mp-nav .logo-text { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:#f0b429; letter-spacing:2px; display:block; }
+  .mp-nav .logo-sub { font-size:0.6rem; color:rgba(240,180,41,0.7); letter-spacing:3px; text-transform:uppercase; display:block; margin-top:-2px; }
   .mp-back-btn {
     background:transparent; border:1px solid rgba(240,180,41,0.4);
     color:#f0b429; padding:0.55rem 1.3rem; border-radius:50px;
@@ -164,8 +180,10 @@ const styles = `
   .mp-category-name { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:#f0b429; }
   .mp-category-count { font-size:0.72rem; color:rgba(255,255,255,0.3); letter-spacing:1px; margin-left:auto; }
 
-  /* ── SHOW MORE ── */
-  .mp-show-more { padding:0.5rem 0 0.2rem; text-align:center; }
+  /* ── COLLAPSED "show more" block ── */
+  .mp-show-more {
+    padding:0.5rem 0 0.2rem; text-align:center;
+  }
   .mp-show-more-btn {
     background:transparent; border:1px solid rgba(240,180,41,0.2);
     color:rgba(240,180,41,0.6); padding:5px 16px; border-radius:50px;
@@ -230,8 +248,8 @@ function useMenuItems() {
     setLoading(true); setError(null);
     try {
       const res = await fetch(
-        `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=200`,
-        { headers: { "Content-Type": "application/json", "Origin": FRONTEND_ORIGIN }, mode: "cors", credentials: "include" }
+     `${PAYLOAD_API}/api/menu?where[restaurants][in]=${PLANET_CORNER_RESTAURANT_ID}&depth=1&limit=200`,
+{ headers: { "Content-Type": "application/json" } }
       );
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
@@ -242,7 +260,7 @@ function useMenuItems() {
           id: doc.id, name: doc.name, description: doc.description || "",
           price: `₹${doc.price}`, veg: doc.veg, isPopular: doc.isPopular,
           category: doc.category,
-          cuisineLabel: doc.cuisineLabel || doc.category,
+          cuisine: categoryLabels[doc.category] || doc.category,
           img: uploaded || fallback,
           fallbackImg: fallback,
         };
@@ -255,26 +273,7 @@ function useMenuItems() {
   return { items, loading, error, refetch: fetchMenu };
 }
 
-// ─── DERIVE CATEGORIES FROM DATA ──────────────────────────────────────────────
-function useCategories(items) {
-  return useMemo(() => {
-    const seen = new Set();
-    const result = [];
-    items.forEach(item => {
-      if (item.category && !seen.has(item.category)) {
-        seen.add(item.category);
-        result.push({
-          value: item.category,
-          label: item.cuisineLabel || item.category,
-          icon:  CATEGORY_ICONS[item.category] || "🍴",
-        });
-      }
-    });
-    return result;
-  }, [items]);
-}
-
-// ─── ITEM ROW ─────────────────────────────────────────────────────────────────
+// ─── ITEM ROW COMPONENT ───────────────────────────────────────────────────────
 function ItemRow({ item }) {
   return (
     <div className="mp-item">
@@ -301,15 +300,18 @@ function ItemRow({ item }) {
 }
 
 // ─── CATEGORY BLOCK ───────────────────────────────────────────────────────────
+// collapsed=true → show only 3 items + "X more" button that jumps to that category
 function CategoryBlock({ cat, items, collapsed = false, onExpand }) {
+  const label   = categoryLabels[cat] || cat;
+  const icon    = categoryIcons[cat]  || "🍴";
   const visible = collapsed ? items.slice(0, 3) : items;
   const extra   = collapsed ? items.length - 3 : 0;
 
   return (
-    <div className="mp-category" id={`cat-${cat.value}`}>
+    <div className="mp-category" id={`cat-${cat}`}>
       <div className="mp-category-header">
-        <span className="mp-category-icon">{cat.icon}</span>
-        <span className="mp-category-name">{cat.label}</span>
+        <span className="mp-category-icon">{icon}</span>
+        <span className="mp-category-name">{label}</span>
         <span className="mp-category-count">{items.length} items</span>
       </div>
       <div>
@@ -317,8 +319,8 @@ function CategoryBlock({ cat, items, collapsed = false, onExpand }) {
       </div>
       {extra > 0 && (
         <div className="mp-show-more">
-          <button className="mp-show-more-btn" onClick={() => onExpand(cat.value)}>
-            +{extra} more in {cat.label} →
+          <button className="mp-show-more-btn" onClick={() => onExpand(cat)}>
+            +{extra} more in {label} →
           </button>
         </div>
       )}
@@ -326,61 +328,61 @@ function CategoryBlock({ cat, items, collapsed = false, onExpand }) {
   );
 }
 
-// ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
+// ─── MAIN EXPORT ─────────────────────────────────────────────────────────────
 export default function MenuPage() {
+  const navigate = useNavigate();
   const { items, loading, error, refetch } = useMenuItems();
-  const [activeCat, setActiveCat] = useState("all");
-  const filterBarRef  = useRef(null);
-  const contentTopRef = useRef(null);
+  const [activeCat, setActiveCat]   = useState("all");
+  const filterBarRef                = useRef(null);
+  const contentTopRef               = useRef(null);
 
-  const CATEGORIES = useCategories(items);
-
-  // Group items by category
-  const grouped = useMemo(() => items.reduce((acc, item) => {
+  // Group by category
+  const grouped = items.reduce((acc, item) => {
     if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
     return acc;
-  }, {}), [items]);
+  }, {});
 
-  // Ordered list of present category keys
-  const allCatValues = useMemo(
-    () => CATEGORIES.map(c => c.value).filter(v => grouped[v]?.length > 0),
-    [CATEGORIES, grouped]
+  const categoryOrder = ["ice-cream","pastries","shakes","desserts","waffles","coffee","snacks"];
+  const allCats = Object.keys(grouped).sort(
+    (a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b)
   );
 
   // ── SELECT CATEGORY ──
-  const selectCat = (val) => {
-    setActiveCat(val);
-    const tab = filterBarRef.current?.querySelector(`[data-cat="${val}"]`);
+  const selectCat = (cat) => {
+    setActiveCat(cat);
+    // Scroll filter tab into view
+    const tab = filterBarRef.current?.querySelector(`[data-cat="${cat}"]`);
     tab?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    // Scroll content to top
     setTimeout(() => {
       contentTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
   };
 
-  // ── SUMMARY COUNTS ──
+  // ── COUNTS ──
   const vegCount     = items.filter(i => i.veg).length;
   const nonVegCount  = items.filter(i => !i.veg).length;
   const popularCount = items.filter(i => i.isPopular).length;
 
-  // ── FIND CATEGORY OBJECT ──
-  const catObj = (val) => CATEGORIES.find(c => c.value === val) || { value: val, label: val, icon: "🍴" };
-
   // ── RENDER CATEGORIES ──
+  // If a specific cat is selected: show it FULLY first, then divider, then rest collapsed
   const renderCategories = () => {
     if (activeCat === "all") {
-      return allCatValues.map(val => (
-        <CategoryBlock key={val} cat={catObj(val)} items={grouped[val]} collapsed={false} onExpand={selectCat} />
+      return allCats.map(cat => (
+        <CategoryBlock key={cat} cat={cat} items={grouped[cat]} collapsed={false} onExpand={selectCat} />
       ));
     }
 
     const selectedItems = grouped[activeCat] || [];
-    const otherCats     = allCatValues.filter(v => v !== activeCat);
+    const otherCats     = allCats.filter(c => c !== activeCat);
 
     return (
       <>
-        <CategoryBlock cat={catObj(activeCat)} items={selectedItems} collapsed={false} onExpand={selectCat} />
+        {/* ── SELECTED CATEGORY — fully expanded ── */}
+        <CategoryBlock cat={activeCat} items={selectedItems} collapsed={false} onExpand={selectCat} />
 
+        {/* ── DIVIDER ── */}
         {otherCats.length > 0 && (
           <div className="mp-divider">
             <div className="mp-div-line" />
@@ -389,8 +391,9 @@ export default function MenuPage() {
           </div>
         )}
 
-        {otherCats.map(val => (
-          <CategoryBlock key={val} cat={catObj(val)} items={grouped[val]} collapsed={true} onExpand={selectCat} />
+        {/* ── OTHER CATEGORIES — collapsed to 3 items each ── */}
+        {otherCats.map(cat => (
+          <CategoryBlock key={cat} cat={cat} items={grouped[cat]} collapsed={true} onExpand={selectCat} />
         ))}
       </>
     );
@@ -404,25 +407,30 @@ export default function MenuPage() {
         {/* NAV */}
         <nav className="mp-nav">
           <div className="logo-wrap">
-            <img src="/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
+            <div className="logo-icon">PLANET<br/>CORNER</div>
+            <div>
+              <span className="logo-text">PLANET</span>
+              <span className="logo-sub">Corner — Kochi</span>
+            </div>
           </div>
-          <button className="mp-back-btn" onClick={() => window.history.back()}>
-            ← Back to Home
+          <button className="mp-back-btn" onClick={() => navigate("/corner")}>
+            ← Back to Planet Corner
           </button>
         </nav>
 
         {/* HERO */}
         <div className="mp-hero">
-          <p className="mp-hero-label">Planet Restaurant</p>
+          <p className="mp-hero-label">Planet Corner, Kochi</p>
           <h1>Our Full <em>Menu</em></h1>
           <div className="mp-gold-divider" />
-          <p>Explore our wide range of cuisines — Kerala, Biryani, Seafood, Chinese & more. Freshly prepared every day.</p>
+          <p>Explore our wide selection of signature dishes, refreshing beverages, desserts, café favorites, and authentic multi-cuisine specials — freshly prepared every day..</p>
         </div>
 
         {/* STICKY FILTER BAR */}
         {!loading && !error && items.length > 0 && (
           <div className="mp-filter-bar" ref={filterBarRef}>
             <div className="mp-filter-inner">
+              {/* All tab */}
               <button
                 className={`mp-filter-btn ${activeCat === "all" ? "active" : ""}`}
                 data-cat="all"
@@ -430,14 +438,15 @@ export default function MenuPage() {
               >
                 🍽️ All
               </button>
-              {CATEGORIES.map(cat => (
+              {/* Category tabs */}
+              {allCats.map(cat => (
                 <button
-                  key={cat.value}
-                  className={`mp-filter-btn ${activeCat === cat.value ? "active" : ""}`}
-                  data-cat={cat.value}
-                  onClick={() => selectCat(cat.value)}
+                  key={cat}
+                  className={`mp-filter-btn ${activeCat === cat ? "active" : ""}`}
+                  data-cat={cat}
+                  onClick={() => selectCat(cat)}
                 >
-                  {cat.icon} {cat.label}
+                  {categoryIcons[cat] || "🍴"} {categoryLabels[cat] || cat}
                 </button>
               ))}
             </div>
@@ -456,13 +465,13 @@ export default function MenuPage() {
               >
                 🍽️ All Items
               </div>
-              {CATEGORIES.map(cat => (
+              {allCats.map(cat => (
                 <div
-                  key={cat.value}
-                  className={`mp-scat ${activeCat === cat.value ? "active" : ""}`}
-                  onClick={() => selectCat(cat.value)}
+                  key={cat}
+                  className={`mp-scat ${activeCat === cat ? "active" : ""}`}
+                  onClick={() => selectCat(cat)}
                 >
-                  {cat.icon} {cat.label}
+                  {categoryIcons[cat] || "🍴"} {categoryLabels[cat] || cat}
                 </div>
               ))}
             </div>
@@ -497,7 +506,7 @@ export default function MenuPage() {
             {!loading && !error && items.length > 0 && (
               <div className="mp-summary">
                 <div className="mp-summary-item"><strong>{items.length}</strong> Total Items</div>
-                <div className="mp-summary-item"><strong>{CATEGORIES.length}</strong> Categories</div>
+                <div className="mp-summary-item"><strong>{allCats.length}</strong> Categories</div>
                 <div className="mp-summary-item">🟢 <strong>{vegCount}</strong> Veg</div>
                 <div className="mp-summary-item">🔴 <strong>{nonVegCount}</strong> Non-Veg</div>
                 {popularCount > 0 && <div className="mp-summary-item">⭐ <strong>{popularCount}</strong> Popular</div>}
@@ -505,32 +514,30 @@ export default function MenuPage() {
             )}
 
             {/* Selected category banner */}
-            {!loading && !error && activeCat !== "all" && (() => {
-              const cat = catObj(activeCat);
-              return (
-                <div className="mp-sel-banner">
-                  <div className="mp-sel-left">
-                    <span className="mp-sel-emoji">{cat.icon}</span>
-                    <div>
-                      <div className="mp-sel-title">{cat.label}</div>
-                      <div className="mp-sel-count">{(grouped[activeCat] || []).length} items</div>
-                    </div>
+            {!loading && !error && activeCat !== "all" && (
+              <div className="mp-sel-banner">
+                <div className="mp-sel-left">
+                  <span className="mp-sel-emoji">{categoryIcons[activeCat] || "🍴"}</span>
+                  <div>
+                    <div className="mp-sel-title">{categoryLabels[activeCat] || activeCat}</div>
+                    <div className="mp-sel-count">{(grouped[activeCat] || []).length} items</div>
                   </div>
-                  <button className="mp-sel-clear" onClick={() => selectCat("all")}>✕ Show All</button>
                 </div>
-              );
-            })()}
+                <button className="mp-sel-clear" onClick={() => selectCat("all")}>✕ Show All</button>
+              </div>
+            )}
 
             {/* Categories */}
             {!loading && !error && items.length > 0 && renderCategories()}
+
           </div>
         </div>
 
         {/* FOOTER */}
         <div className="mp-footer">
-          <p>© 2025 Planet Restaurant</p>
-          <button className="mp-footer-btn" onClick={() => window.history.back()}>
-            ← Back to Home
+          <p>© 2025 Planet Corner — Elamkulam, Kochi</p>
+          <button className="mp-footer-btn" onClick={() => navigate("/corner")}>
+            ← Back to Planet Corner
           </button>
         </div>
 

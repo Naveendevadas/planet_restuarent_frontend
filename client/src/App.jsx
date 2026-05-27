@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Menu from "./components/menu";
 import PlanetCorner from "./components/PlanetCorner";
+import MenuPage from "./components/MenuPage";
+import { ChefHat, Leaf, Globe2, CalendarHeart, Sparkles } from "lucide-react";
 
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
-// ✅ Fix it like this
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
-// const FRONTEND_ORIGIN = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";
 const PLANET_MAIN_RESTAURANT_ID = "6a0bea7b41a1fafddaf26d7c";
 const STATUS_REFRESH_MS = 30_000;
 
@@ -34,7 +34,6 @@ const tabs = [
   { label: "Desserts",        value: "desserts" },
 ];
 
-// ─── FALLBACK IMAGES per category ────────────────────────────────────────────
 const FALLBACK_IMAGES = {
   "kerala":       "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=400&q=80",
   "biryani":      "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=400&q=80",
@@ -47,23 +46,61 @@ const FALLBACK_IMAGES = {
   "default":      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80",
 };
 
+// ─── FEATURES ────────────────────────────────────────────────────────────────
 const features = [
-  { icon:"👨‍🍳", title:"Master Chefs",          text:"Our team of expert chefs brings decades of experience from around the world, crafting dishes with love and precision." },
-  { icon:"🌿", title:"Farm Fresh Ingredients", text:"We source only the freshest local produce and premium ingredients every morning to ensure quality in every bite." },
-  { icon:"🌍", title:"World Cuisines",          text:"From Kerala to Korea, from Italy to India — explore 200+ dishes from across the globe without leaving your seat." },
-  { icon:"🎉", title:"Special Events",          text:"Celebrate birthdays, anniversaries, and corporate events with us. We make every occasion truly memorable." },
-  { icon:"💫", title:"Luxury Ambience",         text:"Step into an atmosphere designed for comfort and elegance — the perfect setting for an unforgettable meal." },
+  {
+    icon: <ChefHat size={34} strokeWidth={1.5} />,
+    title: "Master Chefs",
+    text: "Our team of expert chefs brings decades of experience from around the world, crafting dishes with love and precision.",
+  },
+  {
+    icon: <Leaf size={34} strokeWidth={1.5} />,
+    title: "Farm Fresh Ingredients",
+    text: "We source only the freshest local produce and premium ingredients every morning to ensure quality in every bite.",
+  },
+  {
+    icon: <Globe2 size={34} strokeWidth={1.5} />,
+    title: "World Cuisines",
+    text: "From Kerala to Korea, from Italy to India — explore 200+ dishes from across the globe without leaving your seat.",
+  },
+  {
+    icon: <CalendarHeart size={34} strokeWidth={1.5} />,
+    title: "Special Events",
+    text: "Celebrate birthdays, anniversaries, and corporate events with us. We make every occasion truly memorable.",
+  },
+  {
+    icon: <Sparkles size={34} strokeWidth={1.5} />,
+    title: "Luxury Ambience",
+    text: "Step into an atmosphere designed for comfort and elegance — the perfect setting for an unforgettable meal.",
+  },
 ];
 
+// ─── GALLERY ─────────────────────────────────────────────────────────────────
 const gallery = [
-  { emoji:"🍛", label:"Kerala Feast", span:true },
-  { emoji:"🥘", label:"Biryani" },
-  { emoji:"🍣", label:"Sushi" },
-  { emoji:"🍕", label:"Pizza" },
-  { emoji:"🍰", label:"Desserts" },
+  {
+    img:   "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=800&q=80",
+    label: "Kerala Feast",
+    span:  true,
+  },
+  {
+    img:   "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80",
+    label: "Biryani",
+  },
+  {
+    img:   "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=600&q=80",
+    label: "Seafood",
+  },
+  {
+    img:   "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=80",
+    label: "Continental",
+  },
+  {
+    img:   "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=600&q=80",
+    label: "Desserts",
+  },
 ];
 
-// ─── STYLES ───────────────────────────────────────────────────────────────────
+// ─── STYLES ──────────────────────────────────────────────────────────────────
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap');
   *,::before,::after{margin:0;padding:0;box-sizing:border-box}
@@ -71,8 +108,8 @@ const styles = `
   body{background:#0f2118}
   .planet-site{background:#0f2118;color:#fff;font-family:'DM Sans',sans-serif;overflow-x:hidden;min-height:100vh}
 
-  /* ── NAV ── */
-  .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(15,33,24,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(240,180,41,0.15);transition:all 0.4s ease}
+  /* NAV */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(15,33,24,0.75);backdrop-filter:blur(14px);border-bottom:1px solid rgba(240,180,41,0.15);transition:all 0.4s ease}
   .nav.scrolled{padding:0.8rem 4rem;background:rgba(15,33,24,0.95);box-shadow:0 4px 30px rgba(0,0,0,0.4)}
   .logo-wrap{display:flex;align-items:center;gap:12px}
   .logo-icon{width:42px;height:42px;background:#f0b429;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#0f2118;line-height:1.2;text-align:center;letter-spacing:-0.5px;transition:transform 0.3s ease}
@@ -90,7 +127,7 @@ const styles = `
   .nav-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(240,180,41,0.4)}
   .nav-logo-img{height:51px;width:auto;object-fit:contain}
 
-  /* ── HERO ── */
+  /* HERO */
   .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:7rem 4rem 4rem;gap:3rem;position:relative;overflow:hidden;isolation:isolate}
   .hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80');background-size:cover;background-position:center;filter:blur(8px) saturate(1.1);transform:scale(1.08);z-index:-3}
   .hero-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(15,33,24,0.96) 0%,rgba(15,33,24,0.75) 45%,rgba(15,33,24,0.55) 100%),radial-gradient(circle at 80% 30%,rgba(240,180,41,0.18) 0%,transparent 55%),radial-gradient(circle at 20% 80%,rgba(240,180,41,0.08) 0%,transparent 50%);z-index:-2}
@@ -103,32 +140,33 @@ const styles = `
   @keyframes fadeSlideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
   @keyframes fadeSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
   @keyframes fadeSlideLeft{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes scaleIn{from{opacity:0;transform:translateX(-50%) scale(0.7) rotate(-6deg)}to{opacity:1;transform:translateX(-50%) scale(1) rotate(0deg)}}
-  @keyframes imgReveal{0%{opacity:0;transform:translateX(-50%) scale(0.75) translateY(10px)}60%{opacity:1;transform:translateX(-50%) scale(1.06) translateY(-3px)}100%{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  @keyframes floatTag{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  @keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes toastOut{to{opacity:0;transform:translateY(10px)}}
+
   .hero h1{font-family:'Playfair Display',serif;font-size:4.2rem;line-height:1.05;font-weight:900;margin-bottom:1.2rem;text-shadow:0 4px 30px rgba(0,0,0,0.5);animation:fadeSlideUp 0.9s 0.2s ease both}
   .hero h1 em{font-style:normal;display:block;background:linear-gradient(135deg,#f0b429 0%,#f5c842 50%,#fce08a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .hero-desc{color:rgba(255,255,255,0.75);font-size:1.05rem;line-height:1.7;max-width:440px;margin-bottom:2rem;text-shadow:0 2px 10px rgba(0,0,0,0.4);animation:fadeSlideUp 0.9s 0.35s ease both}
   .hero-btns{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;animation:fadeSlideUp 0.9s 0.5s ease both}
   .btn-primary{background:#f0b429;color:#0f2118;border:none;padding:0.9rem 2.1rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(240,180,41,0.25)}
   .btn-primary:hover{background:#f5c842;transform:translateY(-3px);box-shadow:0 16px 40px rgba(240,180,41,0.5)}
-  .btn-primary:active{transform:translateY(0)}
   .btn-ghost{background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:0.9rem 2.1rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;transition:all 0.25s;backdrop-filter:blur(10px)}
   .btn-ghost:hover{border-color:#f0b429;color:#f0b429;background:rgba(240,180,41,0.08);transform:translateY(-3px)}
   .arrow-icon{width:22px;height:22px;background:#0f2118;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem}
   .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;animation:fadeSlideLeft 1s 0.4s ease both}
   .food-plate{width:400px;height:400px;border-radius:50%;background:#0f2118;border:3px solid rgba(240,180,41,0.3);display:flex;align-items:center;justify-content:center;position:relative;animation:float 4s ease-in-out infinite;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.5),0 0 0 8px rgba(15,33,24,0.6),0 0 0 9px rgba(240,180,41,0.2)}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
   .food-plate::before{content:'';position:absolute;inset:-30px;border-radius:50%;border:1px dashed rgba(240,180,41,0.3);animation:spin 30s linear infinite;pointer-events:none}
   .food-plate::after{content:'';position:absolute;inset:-55px;border-radius:50%;border:1px dashed rgba(240,180,41,0.12);animation:spin 45s linear infinite reverse;pointer-events:none}
-  @keyframes spin{to{transform:rotate(360deg)}}
   .food-plate-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
   .float-tag{position:absolute;background:rgba(26,40,32,0.85);border:1px solid rgba(240,180,41,0.35);border-radius:14px;padding:0.7rem 1.1rem;display:flex;align-items:center;gap:8px;font-size:0.8rem;backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
   .float-tag .dot{width:8px;height:8px;border-radius:50%;background:#f0b429;flex-shrink:0;box-shadow:0 0 10px #f0b429}
   .tag1{top:40px;left:-30px;animation:floatTag 3.5s ease-in-out infinite}
   .tag2{bottom:60px;right:-40px;animation:floatTag 3.5s ease-in-out infinite 1.5s}
-  @keyframes floatTag{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-  /* ── STATS ── */
+  /* STATS */
   .stats{display:flex;border-top:1px solid rgba(240,180,41,0.1);border-bottom:1px solid rgba(240,180,41,0.1)}
   .stat{flex:1;padding:2rem 3rem;text-align:center;border-right:1px solid rgba(240,180,41,0.1);transition:background 0.3s ease}
   .stat:last-child{border-right:none}
@@ -136,36 +174,28 @@ const styles = `
   .stat-num{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;color:#f0b429;display:block}
   .stat-label{font-size:0.8rem;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;margin-top:4px;display:block}
 
-  /* ── SECTION ── */
+  /* SECTION */
   .section{padding:5rem 4rem}
   .section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem}
   .section-label{font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;color:#f0b429;margin-bottom:0.5rem}
   .section-title{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;line-height:1.2}
   .section-desc{color:rgba(255,255,255,0.5);font-size:0.9rem;max-width:300px;text-align:right;line-height:1.6}
 
-  /* ── MENU TABS ── */
+  /* MENU TABS */
   .menu-tabs{display:flex;gap:0.5rem;margin-bottom:4.5rem;flex-wrap:wrap}
-  .tab{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:0.5rem 1.3rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
-  .tab::before{content:'';position:absolute;inset:0;background:#f0b429;transform:scale(0);border-radius:50px;transition:transform 0.3s ease;z-index:-1}
+  .tab{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:0.5rem 1.3rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.25s}
   .tab.active,.tab:hover{background:#f0b429;color:#0f2118;border-color:#f0b429;font-weight:500;transform:translateY(-2px);box-shadow:0 6px 20px rgba(240,180,41,0.25)}
 
-  /* ── MENU GRID ── */
+  /* MENU GRID */
   .menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;row-gap:7rem;padding-top:6rem}
-
-  /* ── MENU CARD ── */
-  .menu-card{position:relative;background:linear-gradient(180deg,#1e2e22 0%,#182520 100%);border-radius:24px;padding:6rem 1.3rem 1.6rem;border:1px solid rgba(240,180,41,0.12);text-align:center;overflow:visible;animation:fadeSlideUp 0.6s ease both;cursor:pointer;will-change:transform,box-shadow;transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),border-color 0.4s ease,box-shadow 0.55s cubic-bezier(0.22,1,0.36,1),background 0.4s ease}
-  .menu-card:hover{transform:translateY(-14px) scale(1.012);border-color:rgba(240,180,41,0.55);background:linear-gradient(180deg,#223323 0%,#1b2a22 100%);box-shadow:0 8px 20px rgba(0,0,0,0.2),0 25px 55px rgba(0,0,0,0.45),0 45px 90px rgba(0,0,0,0.2),0 0 0 1px rgba(240,180,41,0.2),inset 0 1px 0 rgba(240,180,41,0.07)}
-  .menu-card:active{transform:translateY(-8px) scale(1.005);transition-duration:0.15s}
-
-  /* ── PLATE IMAGE ── */
+  .menu-card{position:relative;background:linear-gradient(180deg,#1e2e22 0%,#182520 100%);border-radius:24px;padding:6rem 1.3rem 1.6rem;border:1px solid rgba(240,180,41,0.12);text-align:center;overflow:visible;animation:fadeSlideUp 0.6s ease both;cursor:pointer;transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),border-color 0.4s ease,box-shadow 0.55s cubic-bezier(0.22,1,0.36,1),background 0.4s ease}
+  .menu-card:hover{transform:translateY(-14px) scale(1.012);border-color:rgba(240,180,41,0.55);background:linear-gradient(180deg,#223323 0%,#1b2a22 100%);box-shadow:0 25px 55px rgba(0,0,0,0.45),0 0 0 1px rgba(240,180,41,0.2)}
   .plate-img-wrap{position:absolute;top:-75px;left:50%;transform:translateX(-50%);width:160px;height:160px;border-radius:50%;overflow:hidden;box-shadow:0 20px 45px rgba(0,0,0,0.5),0 0 0 5px rgba(15,33,24,0.9),0 0 0 6px rgba(240,180,41,0.15);transition:transform 0.7s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.7s ease}
-  .menu-card:hover .plate-img-wrap{transform:translateX(-50%) translateY(-14px) scale(1.18);box-shadow:0 35px 70px rgba(0,0,0,0.7),0 0 0 5px rgba(15,33,24,0.9),0 0 0 9px rgba(90, 87, 79, 0.55),0 0 50px rgba(240,180,41,0.2)}
-  .plate-img{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;object-fit:cover;transition:transform 0.7s cubic-bezier(0.34,1.56,0.64,1),filter 0.7s ease,opacity 0.7s ease;transform:scale(1);opacity:0}
+  .menu-card:hover .plate-img-wrap{transform:translateX(-50%) translateY(-14px) scale(1.18);box-shadow:0 35px 70px rgba(0,0,0,0.7),0 0 0 5px rgba(15,33,24,0.9),0 0 0 9px rgba(90,87,79,0.55)}
+  .plate-img{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;object-fit:cover;transition:transform 0.7s,filter 0.7s,opacity 0.7s;transform:scale(1);opacity:0}
   .plate-img.loading{opacity:0;transform:scale(0.85)}
   .plate-img.loaded{opacity:1;transform:scale(1)}
   .menu-card:hover .plate-img.loaded{transform:scale(1.12);filter:brightness(1.1) saturate(1.2)}
-  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
   .heart-btn{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;font-size:0.9rem}
   .heart-btn:hover,.heart-btn.liked{color:#ff5a7a;border-color:rgba(255,90,122,0.5);background:rgba(255,90,122,0.1);transform:scale(1.2)}
   .popular-tag{position:absolute;top:1rem;left:1rem;background:#f0b429;color:#0f2118;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:50px;letter-spacing:1px;text-transform:uppercase;animation:pulse 2s infinite}
@@ -177,19 +207,16 @@ const styles = `
   .veg-badge{font-size:0.75rem;padding:2px 8px;border-radius:50px;font-weight:500}
   .veg-badge.veg{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3)}
   .veg-badge.nonveg{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
-
-  /* ── SHOW MORE ── */
   .show-more-wrap{display:flex;justify-content:center;margin-top:3.5rem}
-  .show-more-btn{display:inline-flex;align-items:center;gap:12px;background:transparent;border:1.5px solid rgba(240,180,41,0.4);color:#f0b429;padding:0.95rem 2.8rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;letter-spacing:0.5px;cursor:pointer;position:relative;overflow:hidden;transition:all 0.45s cubic-bezier(0.22,1,0.36,1)}
+  .show-more-btn{display:inline-flex;align-items:center;gap:12px;background:transparent;border:1.5px solid rgba(240,180,41,0.4);color:#f0b429;padding:0.95rem 2.8rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;position:relative;overflow:hidden;transition:all 0.45s cubic-bezier(0.22,1,0.36,1)}
   .show-more-btn::before{content:'';position:absolute;inset:0;background:#f0b429;transform:scaleX(0);transform-origin:left;transition:transform 0.45s cubic-bezier(0.22,1,0.36,1);z-index:0}
   .show-more-btn:hover::before{transform:scaleX(1)}
   .show-more-btn:hover{color:#0f2118;border-color:#f0b429;transform:translateY(-4px);box-shadow:0 16px 40px rgba(240,180,41,0.28)}
-  .show-more-btn:active{transform:translateY(-1px);transition-duration:0.1s}
-  .show-more-btn span{position:relative;z-index:1}
-  .show-more-icon{position:relative;z-index:1;font-size:1.1rem;transition:transform 0.35s ease}
+  .show-more-btn span,.show-more-icon{position:relative;z-index:1}
+  .show-more-icon{font-size:1.1rem;transition:transform 0.35s ease}
   .show-more-btn:hover .show-more-icon{transform:translateX(5px)}
 
-  /* ── STORY ── */
+  /* STORY */
   .story{padding:3rem 4rem;background:linear-gradient(180deg,#0f2118 0%,#13291c 100%);position:relative;overflow:hidden}
   .story::before{content:'';position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(240,180,41,0.08) 0%,transparent 70%);pointer-events:none}
   .story-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:center;position:relative;z-index:1}
@@ -211,28 +238,29 @@ const styles = `
   .chef-signature{font-family:'Playfair Display',serif;font-style:italic;color:#f0b429;font-size:1.1rem;margin-top:1.5rem}
   .chef-role{font-size:0.75rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:0.2rem}
 
-  /* ── FEATURES ── */
+  /* FEATURES */
   .features{background:#1a3828;padding:5rem 4rem}
   .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem}
   .feature-card{padding:2rem;border:1px solid rgba(240,180,41,0.15);border-radius:20px;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);background:rgba(255,255,255,0.02);position:relative;overflow:hidden}
   .feature-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,180,41,0.06) 0%,transparent 60%);opacity:0;transition:opacity 0.3s ease}
   .feature-card:hover::before{opacity:1}
   .feature-card:hover{border-color:rgba(240,180,41,0.4);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.3)}
-  .feature-icon{font-size:2.2rem;margin-bottom:1rem;display:block;transition:transform 0.3s ease}
+  .feature-icon{margin-bottom:1rem;display:block;transition:transform 0.3s ease;color:#f0b429}
   .feature-card:hover .feature-icon{transform:scale(1.15) rotate(5deg)}
   .feature-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:0.6rem;color:#f0b429}
   .feature-text{font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.7}
 
-  /* ── GALLERY ── */
+  /* GALLERY — real food images */
   .gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:220px 220px;gap:1rem;margin-top:3rem}
-  .gal-item{border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,#243a28,#1a2e1e);border:1px solid rgba(240,180,41,0.1);transition:all 0.35s ease;position:relative;overflow:hidden}
-  .gal-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,180,41,0.08),transparent);opacity:0;transition:opacity 0.3s ease}
-  .gal-item:hover::before{opacity:1}
+  .gal-item{border-radius:16px;overflow:hidden;position:relative;border:1px solid rgba(240,180,41,0.1);transition:all 0.35s ease;cursor:pointer}
+  .gal-item:first-child{grid-row:span 2}
   .gal-item:hover{transform:scale(1.03);border-color:rgba(240,180,41,0.4);box-shadow:0 15px 40px rgba(0,0,0,0.4)}
-  .gal-item:first-child{grid-row:span 2;font-size:6rem}
-  .gal-label{position:absolute;bottom:12px;left:12px;background:rgba(15,33,24,0.9);padding:4px 10px;border-radius:50px;font-size:0.7rem;color:#f0b429;letter-spacing:1px;text-transform:uppercase}
+  .gal-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px;transition:transform 0.5s ease,filter 0.5s ease}
+  .gal-item:hover .gal-img{transform:scale(1.08);filter:brightness(1.1) saturate(1.2)}
+  .gal-overlay{position:absolute;inset:0;border-radius:16px;background:linear-gradient(180deg,transparent 40%,rgba(10,25,16,0.85) 100%);z-index:1}
+  .gal-label{position:absolute;bottom:12px;left:12px;z-index:2;background:rgba(15,33,24,0.85);padding:4px 10px;border-radius:50px;font-size:0.7rem;color:#f0b429;letter-spacing:1px;text-transform:uppercase;backdrop-filter:blur(8px);border:1px solid rgba(240,180,41,0.25)}
 
-  /* ── BRANCHES SECTION ── */
+  /* BRANCHES */
   .branches{padding:5rem 4rem;background:#13291c;position:relative;overflow:hidden}
   .branches::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(240,180,41,0.07),transparent 70%);pointer-events:none}
   .branches-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem}
@@ -245,13 +273,13 @@ const styles = `
   .branch-sub{font-size:0.8rem;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-bottom:1.5rem}
   .branch-info{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.8rem}
   .branch-row{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.6);font-size:0.88rem}
-  .branch-row span:first-child{font-size:1rem;width:20px;text-align:center}
+  .branch-row span:first-child{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
   .branch-visit-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(240,180,41,0.4);color:#f0b429;padding:0.6rem 1.4rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.25s}
   .branch-visit-btn:hover{background:#f0b429;color:#0f2118;transform:translateX(4px)}
 
-  /* ── FOOTER ── */
+  /* FOOTER */
   footer{background:#0b1c13;padding:4rem 4rem 0;border-top:1px solid rgba(240,180,41,0.1)}
-  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:0;padding-bottom:3.5rem}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3.5rem}
   .footer-brand p{font-size:0.87rem;color:rgba(255,255,255,0.4);line-height:1.8;margin-top:0.8rem;max-width:260px;margin-bottom:1.5rem}
   .footer-col h4{font-family:'Playfair Display',serif;font-size:1rem;color:#f0b429;margin-bottom:1.2rem;font-weight:700;letter-spacing:0.5px}
   .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.65rem}
@@ -268,35 +296,105 @@ const styles = `
   .footer-hours-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:50px;padding:0.3rem 0.8rem;font-size:0.72rem;color:#4ade80;font-weight:500;margin-bottom:0.5rem}
   .footer-hours-dot{width:5px;height:5px;background:#4ade80;border-radius:50%;animation:pulse 1.8s infinite;display:inline-block;flex-shrink:0}
 
-  /* ── SCROLL FADE ── */
+  /* SCROLL FADE */
   .scroll-fade{opacity:0;transform:translateY(35px);transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),transform 0.8s cubic-bezier(0.4,0,0.2,1)}
   .scroll-fade.visible{opacity:1;transform:translateY(0)}
 
-  /* ── TOAST ── */
+  /* TOAST */
   .toast{position:fixed;bottom:2rem;right:2rem;background:#1e2e22;border:1px solid rgba(240,180,41,0.35);border-radius:14px;padding:0.9rem 1.4rem;display:flex;align-items:center;gap:10px;font-size:0.88rem;color:#fff;z-index:999;box-shadow:0 10px 40px rgba(0,0,0,0.4);animation:toastIn 0.4s cubic-bezier(0.4,0,0.2,1)}
-  .toast.hide{animation:toastOut 0.3s ease forwards}
-  @keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-  @keyframes toastOut{to{opacity:0;transform:translateY(10px)}}
   .toast-icon{font-size:1.1rem}
 
-  /* ── RESPONSIVE ── */
-  @media(max-width:900px){
-    .nav{padding:1rem 1.5rem}.nav-links{display:none}
-    .hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;text-align:center}
-    .hero-visual{display:none}.hero h1{font-size:2.6rem}.hero-btns{justify-content:center}
-    .stats{flex-wrap:wrap}.stat{min-width:50%}
-    .section{padding:3rem 1.5rem}.section-header{flex-direction:column;gap:1rem}.section-desc{text-align:left}
-    .menu-grid{grid-template-columns:1fr 1fr;padding-top:5rem;row-gap:5rem}
-    .plate-img{width:140px;height:140px;top:-65px}.menu-card{padding:5rem 1rem 1.3rem}
-    .story{padding:3rem 1.5rem}.story-grid{grid-template-columns:1fr;gap:2rem}
-    .story-visual{height:320px}.story h2{font-size:2rem}.story-pillars{grid-template-columns:1fr}
-    .features{padding:3rem 1.5rem}.features-grid{grid-template-columns:1fr}
-    .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}.gal-item:first-child{grid-row:span 1}
-    .branches{padding:3rem 1.5rem}.branches-grid{grid-template-columns:1fr}
-    footer{padding:3rem 1.5rem 0}.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  /* ══════════════════════════════════════════
+     FULLY RESPONSIVE — mobile & tablet
+  ══════════════════════════════════════════ */
+  @media(max-width:1024px){
+    .menu-grid{grid-template-columns:repeat(3,1fr)}
+    .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
     .footer-brand{grid-column:1/-1}
-    .footer-bottom{flex-direction:column;text-align:center}
+    .features-grid{grid-template-columns:repeat(2,1fr)}
+  }
+
+  @media(max-width:768px){
+    /* NAV */
+    .nav{padding:0.75rem 1rem}
+.nav-links{display:none}
+.nav-logo-img{height:34px}
+.nav-btn{font-size:0.75rem;padding:0.45rem 0.9rem;letter-spacing:0}
+
+    /* HERO */
+    .hero{grid-template-columns:1fr;padding:5.5rem 1.5rem 3rem;text-align:center;min-height:auto}
+    .hero-visual{display:none}
+    .hero h1{font-size:2.2rem;line-height:1.1;word-break:break-word}
+    .hero h1 em{font-size:inherit}
+    .hero-desc{font-size:0.95rem;max-width:100%;margin-left:auto;margin-right:auto}
+    .hero-btns{justify-content:center;flex-direction:column;align-items:center;gap:0.8rem}
+    .btn-primary,.btn-ghost{width:100%;max-width:280px;justify-content:center}
+    .hero-badge{font-size:0.65rem;padding:0.4rem 0.9rem;letter-spacing:1px;text-align:center;white-space:normal;line-height:1.4}
+
+    /* STATS */
+   .stats{flex-wrap:wrap}
+.stat{min-width:50%;padding:0.8rem 0.5rem}
+.stat-num{font-size:1.4rem}
+.stat-label{font-size:0.65rem}
+
+    /* SECTION */
+    .section{padding:3rem 1.5rem}
+    .section-header{flex-direction:column;gap:0.8rem;align-items:flex-start}
+    .section-title{font-size:2rem}
+    .section-desc{text-align:left;max-width:100%}
+
+    /* MENU TABS */
+    .menu-tabs{gap:0.4rem;margin-bottom:3rem}
+    .tab{font-size:0.78rem;padding:0.4rem 0.9rem}
+
+    /* MENU GRID */
+    .menu-grid{grid-template-columns:1fr 1fr;padding-top:4.5rem;row-gap:5rem;gap:1rem}
+    .menu-card{padding:4.5rem 0.8rem 1.2rem}
+    .plate-img-wrap{width:110px;height:110px;top:-50px}
+    .card-name{font-size:1rem}
+    .card-desc{font-size:0.75rem;min-height:auto}
+    .menu-price{font-size:1.2rem}
+
+    /* STORY */
+    .story{padding:3rem 1.5rem}
+    .story-grid{grid-template-columns:1fr;gap:2rem}
+    .story-visual{height:260px}
+    .story h2{font-size:1.8rem}
+    .story-pillars{grid-template-columns:1fr}
+
+    /* FEATURES */
+    .features{padding:3rem 1.5rem}
+    .features-grid{grid-template-columns:1fr;gap:1.2rem}
+
+    /* GALLERY — single column stack on mobile */
+    .gallery-grid{
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:160px 160px 160px;
+    }
+    .gal-item:first-child{grid-row:span 1;grid-column:span 2}
+
+    /* BRANCHES */
+    .branches{padding:3rem 1.5rem}
+    .branches-grid{grid-template-columns:1fr}
+
+    /* FOOTER */
+    footer{padding:3rem 1.5rem 0}
+    .footer-grid{grid-template-columns:1fr;gap:2rem}
+    .footer-brand{grid-column:auto}
+    .footer-bottom{flex-direction:column;text-align:center;gap:1rem}
+
+    /* TOAST */
     .toast{right:1rem;left:1rem;bottom:1rem}
+  }
+
+  @media(max-width:400px){
+    .hero h1{font-size:1.8rem}
+    .section-title{font-size:1.7rem}
+    .menu-grid{grid-template-columns:1fr}
+    .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto}
+    .gal-item{height:180px}
+    .gal-item:first-child{grid-column:span 1}
+    .stat{min-width:50%}
   }
 `;
 
@@ -325,9 +423,6 @@ function useToast() {
   return { toast, show };
 }
 
-// ─── RESTAURANT STATUS HOOK ───────────────────────────────────────────────────
-// Fetches the main restaurant doc from Payload → status, openingTime, closingTime
-// Auto-refreshes every 30 seconds so the open/closed badge stays live
 function useRestaurantStatus() {
   const [status,      setStatus]      = useState(null);
   const [openingTime, setOpeningTime] = useState(null);
@@ -335,13 +430,9 @@ function useRestaurantStatus() {
   const [loading,     setLoading]     = useState(true);
 
   const fetchStatus = () => {
-   fetch(
-  `${PAYLOAD_API}/api/restaurant/${PLANET_MAIN_RESTAURANT_ID}`,
-  {
-    headers: { "Content-Type": "application/json" },
-    mode: "cors",
-  }
-)
+    fetch(`${PAYLOAD_API}/api/restaurant/${PLANET_MAIN_RESTAURANT_ID}`, {
+      headers: { "Content-Type": "application/json" }, mode: "cors",
+    })
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(doc => {
         setStatus(doc.status ?? "active");
@@ -367,60 +458,39 @@ function useMenuItems() {
   const [error,   setError]   = useState(null);
 
   const fetchMenu = async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
     try {
       const res = await fetch(
-  `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
-  {
-    headers: { "Content-Type": "application/json" },
-    mode: "cors",
-  }
-);
+        `${PAYLOAD_API}/api/menu?where[available][equals]=true&depth=1&limit=100`,
+        { headers: { "Content-Type": "application/json" }, mode: "cors" }
+      );
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
-
-      const mapped = (data.docs || []).map((doc) => {
+      setItems((data.docs || []).map(doc => {
         let imgUrl = FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"];
-        
-      // ✅ REPLACE WITH THIS
-         if (doc.image?.url) {
-           imgUrl = doc.image.url.startsWith("http")
-             ? doc.image.url
-             : `${PAYLOAD_API}${doc.image.url}`;
-         }
-
+        if (doc.image?.url) {
+          imgUrl = doc.image.url.startsWith("http") ? doc.image.url : `${PAYLOAD_API}${doc.image.url}`;
+        }
         return {
-          id:          doc.id,
-          name:        doc.name,
-          description: doc.description || "",
-          price:       `₹${doc.price}`,
-          veg:         doc.veg,
-          isPopular:   doc.isPopular,
-          category:    doc.category,
-          cuisine:     categoryLabels[doc.category] || doc.category,
-          img:         imgUrl,
-          fallbackImg: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
+          id: doc.id, name: doc.name, description: doc.description || "",
+          price: `₹${doc.price}`, veg: doc.veg, isPopular: doc.isPopular,
+          category: doc.category, cuisine: categoryLabels[doc.category] || doc.category,
+          img: imgUrl, fallbackImg: FALLBACK_IMAGES[doc.category] || FALLBACK_IMAGES["default"],
         };
-      });
-
-      setItems(mapped);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+      }));
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
   };
 
   useEffect(() => { fetchMenu(); }, []);
   return { items, loading, error, refetch: fetchMenu };
 }
 
-// ─── SMART IMAGE COMPONENT ────────────────────────────────────────────────────
+// ─── SMART IMAGE ─────────────────────────────────────────────────────────────
 function SmartImage({ src, fallback, alt, className }) {
   const [imgSrc, setImgSrc] = useState(src);
   const [status, setStatus] = useState("loading");
-  const imgRef              = useRef(null);
+  const imgRef = useRef(null);
 
   useEffect(() => { setImgSrc(src); setStatus("loading"); }, [src]);
   useEffect(() => {
@@ -428,26 +498,18 @@ function SmartImage({ src, fallback, alt, className }) {
     if (el && el.complete && el.naturalWidth > 0) setStatus("loaded");
   }, [imgSrc]);
 
-  const handleLoad  = () => setStatus("loaded");
-  const handleError = () => {
-    if (imgSrc !== fallback) { setImgSrc(fallback); setStatus("loading"); }
-    else setStatus("loaded");
-  };
-
   return (
     <>
-      <div className="img-shimmer" style={{ opacity: status === "loading" ? 1 : 0, transition: "opacity 0.6s ease", pointerEvents: "none" }} />
+      <div style={{ opacity: status === "loading" ? 1 : 0, transition: "opacity 0.6s ease", pointerEvents: "none" }} />
       <img
         ref={imgRef}
         className={`${className} ${status === "loaded" ? "loaded" : "loading"}`}
-        src={imgSrc}
-        alt={alt}
-        loading="lazy"
-        onLoad={handleLoad}
-        onError={handleError}
+        src={imgSrc} alt={alt} loading="lazy"
+        onLoad={() => setStatus("loaded")}
+        onError={() => { if (imgSrc !== fallback) { setImgSrc(fallback); setStatus("loading"); } else setStatus("loaded"); }}
         style={{
-          opacity:    status === "loaded" ? 1 : 0,
-          filter:     status === "loaded" ? "blur(0px) saturate(1)" : "blur(6px) saturate(0.4)",
+          opacity: status === "loaded" ? 1 : 0,
+          filter: status === "loaded" ? "blur(0px) saturate(1)" : "blur(6px) saturate(0.4)",
           transition: status === "loaded" ? "opacity 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.7s cubic-bezier(0.22,1,0.36,1)" : "none",
         }}
       />
@@ -457,12 +519,7 @@ function SmartImage({ src, fallback, alt, className }) {
 
 function Toast({ toast }) {
   if (!toast) return null;
-  return (
-    <div className="toast">
-      <span className="toast-icon">{toast.icon}</span>
-      {toast.msg}
-    </div>
-  );
+  return <div className="toast"><span className="toast-icon">{toast.icon}</span>{toast.msg}</div>;
 }
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
@@ -472,11 +529,11 @@ function Navbar({ sectionRefs }) {
   const navigate                = useNavigate();
 
   const links = [
-    { label:"Home",     ref:sectionRefs.home },
-    { label:"Menu",     ref:sectionRefs.menu },
-    { label:"About",    ref:sectionRefs.about },
-    { label:"Gallery",  ref:sectionRefs.gallery },
-    { label:"Branches", ref:sectionRefs.branches },
+    { label: "Home",     ref: sectionRefs.home },
+    { label: "Menu",     ref: sectionRefs.menu },
+    { label: "About",    ref: sectionRefs.about },
+    { label: "Gallery",  ref: sectionRefs.gallery },
+    { label: "Branches", ref: sectionRefs.branches },
   ];
 
   useEffect(() => {
@@ -487,7 +544,7 @@ function Navbar({ sectionRefs }) {
 
   const scrollTo = (label, ref) => {
     setActive(label);
-    ref?.current?.scrollIntoView({ behavior:"smooth" });
+    ref?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -511,9 +568,7 @@ function Navbar({ sectionRefs }) {
       <ul className="nav-links">
         {links.map(({ label, ref }) => (
           <li key={label}>
-            <a className={active === label ? "active" : ""} onClick={() => scrollTo(label, ref)}>
-              {label}
-            </a>
+            <a className={active === label ? "active" : ""} onClick={() => scrollTo(label, ref)}>{label}</a>
           </li>
         ))}
       </ul>
@@ -531,29 +586,33 @@ function Hero({ isOpen, hoursText, statusLoading }) {
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
       <div>
-        {/* Live status badge — matches Planet Corner behaviour exactly */}
         {!statusLoading && (
           <div className={`hero-badge ${isOpen ? "" : "closed"}`}>
             <span className="badge-dot" />
-            {isOpen
-              ? `Now Open — Dine In & Takeaway · ${hoursText}`
-              : "Currently Closed"}
+            {isOpen ? `Now Open — Dine In & Takeaway · ${hoursText}` : "Currently Closed"}
           </div>
         )}
-        <h1>Taste the World<em>On One Plate</em></h1>
-        <p className="hero-desc">From spicy Kerala curries to continental delights — Planet brings the world's finest flavors together under one roof. Fresh. Bold. Unforgettable.</p>
+       <h1>
+  Best Multi-Cuisine Restaurant in Kayamkulam
+  <em>Taste the World On One Plate</em>
+</h1>
+       <p className="hero-desc">
+  Planet Multi-Cuisine Restaurant in Kayamkulam
+  serves authentic Kerala, Arabian, Chinese,
+  Continental, and Indian dishes with premium
+  ambience, family dining, takeaway, and
+  unforgettable flavors.
+</p>
         <div className="hero-btns">
           <button className="btn-primary" onClick={() => navigate("/corner")}>
             Visit Planet Corner <span className="arrow-icon">↗</span>
           </button>
-          <button className="btn-ghost" onClick={() => navigate("/menu")}>
-            Explore Menu
-          </button>
+          <button className="btn-ghost" onClick={() => navigate("/menu")}>Explore Menu</button>
         </div>
       </div>
       <div className="hero-visual">
         <div className="food-plate">
-          <img className="food-plate-img" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" alt="Delicious food" />
+          <img className="food-plate-img" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" alt="Best multi-cuisine food at Planet Restaurant Kayamkulam" />
         </div>
         <div className="float-tag tag1"><span className="dot" /> Chef's Special Today</div>
         <div className="float-tag tag2"><span className="dot" /> 4.9 ★ Rated Restaurant</div>
@@ -567,7 +626,7 @@ function Stats() {
   const ref = useScrollFade();
   return (
     <div className="stats scroll-fade" ref={ref}>
-      {[["200+","Menu Items"],["15+","Years of Taste"],["50k+","Happy Customers"],["4.9★","Average Rating"]].map(([num,label]) => (
+      {[["200+","Menu Items"],["15+","Years of Taste"],["50k+","Happy Customers"],["4.9★","Average Rating"]].map(([num, label]) => (
         <div className="stat" key={label}>
           <span className="stat-num">{num}</span>
           <span className="stat-label">{label}</span>
@@ -579,20 +638,19 @@ function Stats() {
 
 // ─── MENU SECTION ─────────────────────────────────────────────────────────────
 function MenuSection({ toastShow }) {
-  const ref      = useScrollFade();
+  const ref = useScrollFade();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
-  const [liked, setLiked]         = useState({});
+  const [liked, setLiked] = useState({});
   const { items, loading, error, refetch } = useMenuItems();
 
   const filtered = activeTab === "all" ? items : items.filter(i => i.category === activeTab);
   const visible  = filtered.slice(0, 8);
 
-  const changeTab  = (val) => setActiveTab(val);
   const toggleLike = (id, name) => {
     setLiked(p => {
       const next = { ...p, [id]: !p[id] };
-      toastShow(next[id] ? `Added "${name}" to favourites` : `Removed from favourites`, next[id] ? "❤️" : "🤍");
+      toastShow(next[id] ? `Added "${name}" to favourites` : "Removed from favourites", next[id] ? "❤️" : "🤍");
       return next;
     });
   };
@@ -602,23 +660,20 @@ function MenuSection({ toastShow }) {
       <div className="section-header">
         <div>
           <p className="section-label">Our Specialties</p>
-          <h2 className="section-title">Indulge in<br/>Culinary Artistry</h2>
+          <h2 className="section-title">Indulge in<br />Culinary Artistry</h2>
         </div>
         <p className="section-desc">Explore our finest selections, crafted to perfection by our world-class chefs.</p>
       </div>
-
       <div className="menu-tabs">
         {tabs.map(tab => (
-          <button key={tab.value} className={`tab ${activeTab === tab.value ? "active" : ""}`} onClick={() => changeTab(tab.value)}>
+          <button key={tab.value} className={`tab ${activeTab === tab.value ? "active" : ""}`} onClick={() => setActiveTab(tab.value)}>
             {tab.label}
           </button>
         ))}
       </div>
-
       {loading && <div className="menu-loading"><div className="spinner" /><p>Loading dishes...</p></div>}
       {!loading && error && <div className="menu-error"><p>⚠ Could not load menu — {error}</p><button onClick={refetch}>Try Again</button></div>}
       {!loading && !error && filtered.length === 0 && <div className="menu-empty">No dishes found in this category.</div>}
-
       {!loading && !error && visible.length > 0 && (
         <>
           <div className="menu-grid">
@@ -628,7 +683,7 @@ function MenuSection({ toastShow }) {
                 <div className="plate-img-wrap">
                   <SmartImage className="plate-img" src={item.img} fallback={item.fallbackImg} alt={item.name} />
                 </div>
-                <button className={`heart-btn ${liked[item.id] ? "liked" : ""}`} aria-label="favourite" onClick={() => toggleLike(item.id, item.name)}>
+                <button className={`heart-btn ${liked[item.id] ? "liked" : ""}`} onClick={() => toggleLike(item.id, item.name)}>
                   {liked[item.id] ? "♥" : "♡"}
                 </button>
                 <p className="card-cuisine">{item.cuisine}</p>
@@ -657,10 +712,10 @@ function MenuSection({ toastShow }) {
 function OurStory() {
   const ref = useScrollFade();
   const pillars = [
-    { icon:"🌾", title:"Local Roots",       text:"Ingredients sourced fresh every morning from Kerala's finest farms." },
-    { icon:"🌏", title:"Global Soul",        text:"Authentic recipes brought home by chefs from 6+ countries." },
-    { icon:"❤️",  title:"Made with Love",    text:"Every plate carries the warmth of a home-cooked meal." },
-    { icon:"✨", title:"Memorable Moments", text:"50,000+ happy guests and counting — your table is waiting." },
+    { icon: "🌾", title: "Local Roots",       text: "Ingredients sourced fresh every morning from Kerala's finest farms." },
+    { icon: "🌏", title: "Global Soul",        text: "Authentic recipes brought home by chefs from 6+ countries." },
+    { icon: "❤️",  title: "Made with Love",    text: "Every plate carries the warmth of a home-cooked meal." },
+    { icon: "✨", title: "Memorable Moments", text: "50,000+ happy guests and counting — your table is waiting." },
   ];
   return (
     <section className="story scroll-fade" ref={ref}>
@@ -668,12 +723,15 @@ function OurStory() {
         <div className="story-visual">
           <div className="story-badge">
             <span className="story-badge-num">15+</span>
-            <span className="story-badge-text">Years of<br/>Culinary Craft</span>
+            <span className="story-badge-text">Years of<br />Culinary Craft</span>
           </div>
         </div>
         <div>
+          <p className="section-label">
+  Best Family Restaurant in Kayamkulam
+</p>
           <p className="section-label">Our Story</p>
-          <h2>A Journey of<br/><em>Flavor &amp; Passion</em></h2>
+          <h2>A Journey of<br /><em>Flavor &amp; Passion</em></h2>
           <p>Planet began as a humble dream in the heart of Perumbavoor — a small kitchen with big ambitions. What started as a love letter to Kerala's traditional flavors slowly grew into a celebration of global cuisines, served under one warm, golden roof.</p>
           <p>Every dish we serve is a story — of hand-picked spices from local farms, of chefs trained across continents, and of families who've chosen us to be part of their most treasured moments.</p>
           <div className="story-pillars">
@@ -698,9 +756,9 @@ function Features() {
   const ref = useScrollFade();
   return (
     <div className="features scroll-fade" ref={ref}>
-      <div style={{ textAlign:"center" }}>
+      <div style={{ textAlign: "center" }}>
         <p className="section-label">Why Choose Planet</p>
-        <h2 className="section-title">A Dining Experience<br/>Like No Other</h2>
+        <h2 className="section-title">A Dining Experience<br />Like No Other</h2>
       </div>
       <div className="features-grid">
         {features.map(f => (
@@ -715,19 +773,23 @@ function Features() {
   );
 }
 
-// ─── GALLERY ─────────────────────────────────────────────────────────────────
+// ─── GALLERY — real food images ───────────────────────────────────────────────
 function Gallery() {
   const ref = useScrollFade();
   return (
     <section className="section scroll-fade" ref={ref}>
       <div className="section-header">
-        <div><p className="section-label">Food Gallery</p><h2 className="section-title">A Feast for<br/>Your Eyes</h2></div>
+        <div>
+          <p className="section-label">Food Gallery</p>
+          <h2 className="section-title">A Feast for<br />Your Eyes</h2>
+        </div>
         <p className="section-desc">Every dish is a masterpiece — crafted to delight all your senses.</p>
       </div>
       <div className="gallery-grid">
         {gallery.map(g => (
-          <div className="gal-item" key={g.label} style={g.span ? { fontSize:"6rem" } : {}}>
-            {g.emoji}
+          <div className="gal-item" key={g.label}>
+            <img className="gal-img" src={g.img} alt={g.label} loading="lazy" />
+            <div className="gal-overlay" />
             <div className="gal-label">{g.label}</div>
           </div>
         ))}
@@ -736,41 +798,39 @@ function Gallery() {
   );
 }
 
-// ─── OUR BRANCHES ─────────────────────────────────────────────────────────────
+// ─── BRANCHES ─────────────────────────────────────────────────────────────────
 function Branches({ branchesRef }) {
-  const ref      = useScrollFade();
+  const ref = useScrollFade();
   const navigate = useNavigate();
   return (
     <section className="branches scroll-fade" ref={ref}>
       <div ref={branchesRef} />
-      <div style={{ textAlign:"center" }}>
+      <div style={{ textAlign: "center" }}>
         <p className="section-label">Our Locations</p>
-        <h2 className="section-title">Two Branches,<br/>One Planet</h2>
+        <h2 className="section-title">Two Branches,<br />One Planet</h2>
       </div>
       <div className="branches-grid">
-        {/* Branch 1 — Main */}
         <div className="branch-card">
           <span className="branch-tag">Main Branch</span>
           <h3 className="branch-name">Planet</h3>
           <p className="branch-sub">Multi Cuisine Restaurant</p>
           <div className="branch-info">
-            <div className="branch-row"><span>📍</span>Near Town Hall, Perumbavoor, Kerala</div>
-            <div className="branch-row"><span>📞</span>+91 98765 43210</div>
-            <div className="branch-row"><span>🕐</span>11:00 AM – 11:00 PM, Daily</div>
+            <div className="branch-row"><span><i className="fas fa-location-dot" /></span>Near Town Hall, Perumbavoor, Kerala</div>
+            <div className="branch-row"><span><i className="fas fa-phone" /></span>+91 98765 43210</div>
+            <div className="branch-row"><span><i className="fas fa-clock" /></span>11:00 AM – 11:00 PM, Daily</div>
           </div>
           <button className="branch-visit-btn" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             You're here ✓
           </button>
         </div>
-        {/* Branch 2 — Corner */}
         <div className="branch-card">
           <span className="branch-tag">Second Branch</span>
           <h3 className="branch-name">Planet Corner</h3>
           <p className="branch-sub">Kochi Outlet</p>
           <div className="branch-info">
-            <div className="branch-row"><span>📍</span>Elamkulam, Kochi, Kerala</div>
-            <div className="branch-row"><span>📞</span>+91 85904 11348</div>
-            <div className="branch-row"><span>🕐</span>11:00 AM – 11:00 PM, Daily</div>
+           <div className="branch-row"><span><i className="fas fa-location-dot" /></span>Elamkulam, Kochi, Kerala</div>
+<div className="branch-row"><span><i className="fas fa-phone" /></span>+91 85904 11348</div>
+<div className="branch-row"><span><i className="fas fa-clock" /></span>11:00 AM – 11:00 PM, Daily</div>
           </div>
           <button className="branch-visit-btn" onClick={() => navigate("/corner")}>
             Visit Planet Corner →
@@ -794,23 +854,18 @@ function Footer({ sectionRefs }) {
   return (
     <footer>
       <div className="footer-grid">
-
-        {/* ── Brand ── */}
         <div className="footer-brand">
           <div className="logo-wrap">
             <img src="/images/planet-logo-transparent.png" alt="Planet Restaurant" className="nav-logo-img" />
           </div>
           <p>Where every meal is a journey around the world. Fresh ingredients, master chefs, and unforgettable flavors — only at Planet.</p>
-          {/* Social links */}
           <div className="social-links">
-            <a className="social-btn" href="https://instagram.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer" title="Instagram">📸</a>
-            <a className="social-btn" href="https://facebook.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer" title="Facebook">📘</a>
-            <a className="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" title="WhatsApp">💬</a>
-            <a className="social-btn" href="tel:+919876543210" title="Call Us">📞</a>
+            <a className="social-btn" href="https://instagram.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
+<a className="social-btn" href="https://facebook.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f" /></a>
+<a className="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
+<a className="social-btn" href="tel:+919876543210"><i className="fas fa-phone" /></a>
           </div>
         </div>
-
-        {/* ── Quick Links ── */}
         <div className="footer-col">
           <h4>Quick Links</h4>
           <ul>
@@ -819,59 +874,41 @@ function Footer({ sectionRefs }) {
             ))}
           </ul>
         </div>
-
-        {/* ── Cuisine ── */}
         <div className="footer-col">
           <h4>Cuisine</h4>
           <ul>
-            {["Kerala Specials", "North Indian", "Chinese", "Continental", "Seafood"].map(l => (
+            {["Kerala Specials","North Indian","Chinese","Continental","Seafood"].map(l => (
               <li key={l}><a href="#">{l}</a></li>
             ))}
           </ul>
         </div>
-
-        {/* ── Hours + Contact ── */}
         <div className="footer-col">
           <h4>Our Branches</h4>
           <ul>
-            <li>
-              <div className="footer-hours-badge">
-                <span className="footer-hours-dot" /> Open Daily
-              </div>
-            </li>
-            <li style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>🕐 11:00 AM – 11:00 PM</li>
-            <li style={{ marginTop: "0.6rem" }}>
-              <a href="https://www.google.com/maps/search/Planet+Restaurant+Perumbavoor+Kerala" target="_blank" rel="noopener noreferrer">
-                📍 Planet — Perumbavoor ↗
-              </a>
-            </li>
-            <li>
-              <a href="https://www.google.com/maps/search/Planet+Corner+Elamkulam+Kochi" target="_blank" rel="noopener noreferrer">
-                📍 Planet Corner — Kochi ↗
-              </a>
-            </li>
-            <li><a href="tel:+919876543210">📞 +91 98765 43210</a></li>
-            <li><a href="tel:+918590411348">📞 +91 85904 11348</a></li>
+            <li><div className="footer-hours-badge"><span className="footer-hours-dot" /> Open Daily</div></li>
+           <li style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500 }}><i className="fas fa-clock" /> 11:00 AM – 11:00 PM</li>
+<li><a href="..."><i className="fas fa-location-dot" /> Planet — Perumbavoor ↗</a></li>
+<li><a href="..."><i className="fas fa-location-dot" /> Planet Corner — Kochi ↗</a></li>
+<li><a href="tel:+919876543210"><i className="fas fa-phone" /> +91 98765 43210</a></li>
+<li><a href="tel:+918590411348"><i className="fas fa-phone" /> +91 85904 11348</a></li>
           </ul>
         </div>
-
       </div>
-
       <div className="footer-divider" />
-
       <div className="footer-bottom">
         <p>© 2025 Planet Multi Cuisine Restaurant. All rights reserved.</p>
         <div className="social-links">
-          <a className="social-btn" href="https://instagram.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer" title="Instagram">📸</a>
-          <a className="social-btn" href="https://facebook.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer" title="Facebook">📘</a>
-          <a className="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" title="WhatsApp">💬</a>
+         <a className="social-btn" href="https://instagram.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
+<a className="social-btn" href="https://facebook.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f" /></a>
+<a className="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
+<a className="social-btn" href="tel:+919876543210"><i className="fas fa-phone" /></a>
         </div>
       </div>
     </footer>
   );
 }
 
-// ─── MAIN HOME PAGE ───────────────────────────────────────────────────────────
+// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 function PlanetRestaurant() {
   const sectionRefs = {
     home:     useRef(null),
@@ -898,9 +935,7 @@ function PlanetRestaurant() {
         <div ref={sectionRefs.menu}><MenuSection toastShow={toastShow} /></div>
         <div ref={sectionRefs.about}><OurStory /><Features /></div>
         <div ref={sectionRefs.gallery}><Gallery /></div>
-        <div ref={sectionRefs.branches}>
-          <Branches branchesRef={sectionRefs.branches} />
-        </div>
+        <div ref={sectionRefs.branches}><Branches branchesRef={sectionRefs.branches} /></div>
         <Footer sectionRefs={sectionRefs} />
         <Toast toast={toast} />
       </div>
@@ -908,13 +943,14 @@ function PlanetRestaurant() {
   );
 }
 
-// ─── ROOT APP WITH ROUTES ─────────────────────────────────────────────────────
+// ─── ROUTES ───────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <Routes>
-      <Route path="/"       element={<PlanetRestaurant />} />
-      <Route path="/menu"   element={<Menu />} />
-      <Route path="/corner" element={<PlanetCorner />} />
+      <Route path="/"             element={<PlanetRestaurant />} />
+      <Route path="/menu"         element={<Menu />} />
+      <Route path="/corner"       element={<PlanetCorner />} />
+      <Route path="/corner/items" element={<MenuPage />} />
     </Routes>
   );
 }
