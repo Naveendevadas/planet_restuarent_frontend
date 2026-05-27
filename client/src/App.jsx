@@ -773,7 +773,11 @@ function MenuSection({ toastShow }) {
                 <p className="card-desc">{item.description}</p>
                 <div className="menu-card-footer">
                   <span className="menu-price">{item.price}</span>
-                  <span className={`veg-badge ${item.veg ? "veg" : "nonveg"}`}>{item.veg ? "🟢" : "🔴"}</span>
+                  {!item.isDrink && (
+  <span className={`veg-badge ${item.veg ? "veg" : "nonveg"}`}>
+    {item.veg ? "🟢" : "🔴"}
+  </span>
+)}
                 </div>
               </div>
             ))}

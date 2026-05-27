@@ -1208,9 +1208,11 @@ function MenuSection({ toastShow }) {
               <p className="card-desc">{item.description}</p>
               <div className="card-footer">
                 <span className="card-price">{item.price}</span>
-                <span className={`veg-badge ${item.veg ? "veg" : "nonveg"}`}>
-                  {item.veg ? "🟢 Veg" : "🔴 Non-Veg"}
-                </span>
+               {!item.isDrink && (
+  <span className={`veg-badge ${item.veg ? "veg" : "nonveg"}`}>
+    {item.veg ? "🟢" : "🔴"}
+  </span>
+)}
               </div>
             </div>
           ))}
@@ -1381,13 +1383,10 @@ export default function PlanetCorner() {
         <footer className="corner-footer">
           <div className="footer-grid">
             <div className="footer-brand">
-              <div className="logo-wrap">
-                <div className="logo-icon">PLANET<br/>CORNER</div>
-                <div>
-                  <span className="logo-text">PLANET</span>
-                  <span className="logo-sub">Corner — Kochi</span>
-                </div>
-              </div>
+             <div className="logo-wrap">
+  <img src="/images/planet-logo-transparent (3).png" alt="Planet Corner Logo" style={{height: '43px', width: 'auto', objectFit: 'contain'}} />
+  <img src="/images/planet-corner-logo-transparent-1.png" alt="Planet Corner" style={{height: '43px', width: 'auto', objectFit: 'contain'}} />
+</div>
               <p>A second home for sweet lovers in the heart of Elamkulam, Kochi. Same beloved flavours, same warmth — now closer to you.</p>
               <div className="footer-social">
                 <a className="social-btn" href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram">
