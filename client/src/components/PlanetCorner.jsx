@@ -278,6 +278,19 @@ const styles = `
   .popular-tag{top:0.5rem;left:0.5rem;font-size:0.55rem}
 }
 
+@media(max-width:768px){
+  .corner-nav{
+    padding:0.8rem 1rem;
+  }
+  .corner-nav .logo-wrap img{
+    height:28px !important;
+  }
+  .back-btn{
+    padding:0.4rem 0.85rem;
+    font-size:0.75rem;
+  }
+}
+
 /* ── 600px — info cards go single column ── */
 @media(max-width:600px){
   .corner-info{padding:1.5rem 1rem}
@@ -340,6 +353,13 @@ const styles = `
   .card-price{font-size:1.1rem}
   .heart-btn{top:0.5rem;right:0.5rem;width:28px;height:28px;font-size:0.8rem}
   .popular-tag{top:0.5rem;left:0.5rem;font-size:0.55rem}
+  .corner-nav .logo-wrap img{
+    height:22px !important;
+  }
+  .back-btn{
+    padding:0.35rem 0.7rem;
+    font-size:0.7rem;
+  }
 }
 `;
 

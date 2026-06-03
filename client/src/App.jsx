@@ -4,6 +4,7 @@ import Menu from "./components/menu";
 import PlanetCorner from "./components/PlanetCorner";
 import MenuPage from "./components/MenuPage";
 import { ChefHat, Leaf, Globe2, CalendarHeart, Sparkles } from "lucide-react";
+import BranchModal from "./components/BranchModal";
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const PAYLOAD_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -681,10 +682,10 @@ function Hero({ isOpen, hoursText, statusLoading }) {
         {[
           "Kerala" ,
           "Biryani" ,
-         "Seafood" ,
+          "Seafood" ,
           "North Indian" ,
           "Chinese" ,
-        "Continental" ,
+          "Continental" ,
         ].map((label, i, arr) => (
           <>
             <div className="cuisine-pill" key={label}>
@@ -975,7 +976,7 @@ function Footer({ sectionRefs }) {
           <ul>
             <li><div className="footer-hours-badge"><span className="footer-hours-dot" /> Open Daily</div></li>
            <li style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500 }}><i className="fas fa-clock" /> 11:00 AM – 11:00 PM</li>
-<li><a href="..."><i className="fas fa-location-dot" /> Planet — Perumbavoor </a></li>
+<li><a href="..."><i className="fas fa-location-dot" /> Planet — Kayamkulam </a></li>
 <li><a href="..."><i className="fas fa-location-dot" /> Planet Corner — Kochi </a></li>
 <li><a href="tel:+919876543210"><i className="fas fa-phone" /> +91 98765 43210</a></li>
 <li><a href="tel:+918590411348"><i className="fas fa-phone" /> +91 85904 11348</a></li>
@@ -1034,11 +1035,14 @@ function PlanetRestaurant() {
 // ─── ROUTES ───────────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <Routes>
-      <Route path="/"             element={<PlanetRestaurant />} />
-      <Route path="/menu"         element={<Menu />} />
-      <Route path="/corner"       element={<PlanetCorner />} />
-      <Route path="/corner/items" element={<MenuPage />} />
-    </Routes>
+    <>
+      <BranchModal />
+      <Routes>
+        <Route path="/"             element={<PlanetRestaurant />} />
+        <Route path="/menu"         element={<Menu />} />
+        <Route path="/corner"       element={<PlanetCorner />} />
+        <Route path="/corner/items" element={<MenuPage />} />
+      </Routes>
+    </>
   );
 }
