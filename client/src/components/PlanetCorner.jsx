@@ -663,13 +663,13 @@ export default function PlanetCorner() {
 
           <h1>
             Planet Corner
-            <em>Elamkulam, Kochi</em>
+            <em>Prathangamood Junction, Kayamkulam</em>
           </h1>
 
           <div className="gold-divider" />
 
           <p className="hero-tagline">
-            The same world-class flavors you love at Planet — now closer to the heart of Kochi.
+            The same world-class flavors you love at Planet — now closer to the heart of Kayamkulam.
           </p>
 
           {/* <div className="hero-feature-strip">
@@ -711,7 +711,7 @@ export default function PlanetCorner() {
           </div> */}
   <a
             className="hero-map-btn"
-            href="https://www.google.com/maps/search/Elamkulam+Kochi+Kerala"
+            href="https://www.google.com/maps/search/PRATHANGAMOOD+JUNCTION+KAYAMKULAM+Kerala"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -722,8 +722,8 @@ export default function PlanetCorner() {
             Open in Google Maps
           </a>
           <p className="hero-about-desc">
-            Planet Corner brings the same beloved experience to the vibrant streets of Elamkulam.
-            Every bite is crafted with the same love that made Planet a household name in Perumbavoor.
+            Planet Corner brings the same beloved experience to the vibrant streets of Kayamkulam.
+            Every bite is crafted with the same love that made Planet a household name in Kayamkulam.
           </p>
 
         
@@ -744,7 +744,7 @@ export default function PlanetCorner() {
                 </svg>
               </span>
               <p className="info-label">Location</p>
-              <p className="info-value">Elamkulam, Kochi</p>
+              <p className="info-value">Prathangamood Junction, Kayamkulam,</p>
               <p className="info-sub">Kerala, India</p>
             </div>
             <div className="info-card">
@@ -754,7 +754,7 @@ export default function PlanetCorner() {
                 </svg>
               </span>
               <p className="info-label">Phone</p>
-              <p className="info-value">+91 85904 11348</p>
+              <p className="info-value">+91 97467 67669</p>
               <p className="info-sub">Call us anytime during hours</p>
             </div>
             <div className="info-card">
@@ -788,7 +788,7 @@ export default function PlanetCorner() {
   <img src="/images/planet-logo-transparent (3).png" alt="Planet Corner Logo" style={{height: '43px', width: 'auto', objectFit: 'contain'}} />
   <img src="/images/planet-corner-logo-transparent-1.png" alt="Planet Corner" style={{height: '43px', width: 'auto', objectFit: 'contain'}} />
 </div>
-              <p>A second home for sweet lovers in the heart of Elamkulam, Kochi. Same beloved flavours, same warmth — now closer to you.</p>
+              <p>A second home for sweet lovers in the heart of  Kayamkulam. Same beloved flavours, same warmth — now closer to you.</p>
               <div className="footer-social">
                 <a className="social-btn" href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -800,12 +800,12 @@ export default function PlanetCorner() {
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                   </svg>
                 </a>
-                <a className="social-btn" href="https://wa.me/918590411348" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+                <a className="social-btn" href="https://wa.me/919746767669" target="_blank" rel="noopener noreferrer" title="WhatsApp">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                   </svg>
                 </a>
-                <a className="social-btn" href="tel:+918590411348" title="Call Us">
+                <a className="social-btn" href="tel:+919746767669" title="Call Us">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.64 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
                   </svg>
@@ -816,7 +816,7 @@ export default function PlanetCorner() {
             <div className="footer-col">
               <h4>About Us</h4>
               <ul>
-                <li>Planet Corner is the second branch of Planet Multi Cuisine Restaurant, Perumbavoor.</li>
+                <li>Planet Corner is the second branch of Planet Multi Cuisine Restaurant, kayamkulam.</li>
                 <li>We serve fresh, quality food crafted daily with the finest ingredients.</li>
                 <li>Every item is made with the same love that made Planet a household name.</li>
               </ul>
@@ -850,10 +850,11 @@ export default function PlanetCorner() {
             <div className="footer-col">
               <h4>Find Us</h4>
               <ul>
-                <li><strong>Address</strong>Elamkulam, Kochi, Kerala, India</li>
-                <li><strong>Phone</strong>+91 85904 11348</li>
+                <li><strong>Address</strong>Prathangamood Junction, Kayamkulam, Kerala, India,  </li>
+                <li>PIN: 690502</li>
+                <li><strong>Phone</strong>+91 9746767669</li>
                 <li>
-                  <a href="https://www.google.com/maps/search/Elamkulam+Kochi+Kerala" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.google.com/maps/search/PRATHANGAMOOD+JUNCTION+KAYAMKULAM+Kerala" target="_blank" rel="noopener noreferrer">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px', verticalAlign: 'middle'}}>
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                       <circle cx="12" cy="10" r="3"/>
@@ -867,7 +868,7 @@ export default function PlanetCorner() {
                       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                       <polyline points="9 22 9 12 15 12 15 22"/>
                     </svg>
-                    Planet Perumbavoor 
+                    Planet Multi Cuisine 
                   </a>
                 </li>
               </ul>
@@ -877,8 +878,8 @@ export default function PlanetCorner() {
           <div className="footer-divider" />
 
           <div className="footer-bottom">
-            <p>© 2025 Planet Corner — Elamkulam, Kochi. Part of Planet Multi Cuisine Restaurant.</p>
-            <button className="back-home-btn" onClick={() => navigate("/")}>← Planet Perumbavoor</button>
+            <p>© 2025 Planet Corner — PRATHANGAMOOD JUNCTION, KAYAMKULAM. Part of Planet Multi Cuisine Restaurant.</p>
+            <button className="back-home-btn" onClick={() => navigate("/")}>← Planet Multi Cuisine</button>
           </div>
         </footer>
 

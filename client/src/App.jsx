@@ -904,8 +904,8 @@ function Branches({ branchesRef }) {
           <h3 className="branch-name">Planet</h3>
           <p className="branch-sub">Multi Cuisine Restaurant</p>
           <div className="branch-info">
-            <div className="branch-row"><span><i className="fas fa-location-dot" /></span>Near Town Hall, Perumbavoor, Kerala</div>
-            <div className="branch-row"><span><i className="fas fa-phone" /></span>+91 98765 43210</div>
+            <div className="branch-row"><span><i className="fas fa-location-dot" /></span>Kareelakulangara, Kayamkulam, Kerala</div>
+            <div className="branch-row"><span><i className="fas fa-phone" /></span>+91 70254 11110</div>
             <div className="branch-row"><span><i className="fas fa-clock" /></span>11:00 AM – 11:00 PM, Daily</div>
           </div>
           <button className="branch-visit-btn" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
@@ -915,10 +915,10 @@ function Branches({ branchesRef }) {
         <div className="branch-card">
           <span className="branch-tag">Second Branch</span>
           <h3 className="branch-name">Planet Corner</h3>
-          <p className="branch-sub">Kochi Outlet</p>
+          <p className="branch-sub">Kayamkulam second Outlet</p>
           <div className="branch-info">
-           <div className="branch-row"><span><i className="fas fa-location-dot" /></span>Elamkulam, Kochi, Kerala</div>
-<div className="branch-row"><span><i className="fas fa-phone" /></span>+91 85904 11348</div>
+           <div className="branch-row"><span><i className="fas fa-location-dot" /></span>Prathangamood Junction, Kayamkulam, Kerala</div>
+<div className="branch-row"><span><i className="fas fa-phone" /></span>+91 97467 67669</div>
 <div className="branch-row"><span><i className="fas fa-clock" /></span>11:00 AM – 11:00 PM, Daily</div>
           </div>
           <button className="branch-visit-btn" onClick={() => navigate("/corner")}>
@@ -951,8 +951,8 @@ function Footer({ sectionRefs }) {
           <div className="social-links">
             <a className="social-btn" href="https://instagram.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
 <a className="social-btn" href="https://facebook.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f" /></a>
-<a className="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
-<a className="social-btn" href="tel:+919876543210"><i className="fas fa-phone" /></a>
+<a className="social-btn" href="https://wa.me/919745000669" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
+<a className="social-btn" href="tel:+919745000669"><i className="fas fa-phone" /></a>
           </div>
         </div>
         <div className="footer-col">
@@ -976,10 +976,26 @@ function Footer({ sectionRefs }) {
           <ul>
             <li><div className="footer-hours-badge"><span className="footer-hours-dot" /> Open Daily</div></li>
            <li style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500 }}><i className="fas fa-clock" /> 11:00 AM – 11:00 PM</li>
-<li><a href="..."><i className="fas fa-location-dot" /> Planet — Kayamkulam </a></li>
-<li><a href="..."><i className="fas fa-location-dot" /> Planet Corner — Kochi </a></li>
-<li><a href="tel:+919876543210"><i className="fas fa-phone" /> +91 98765 43210</a></li>
-<li><a href="tel:+918590411348"><i className="fas fa-phone" /> +91 85904 11348</a></li>
+    <li>
+                  <a href="https://www.google.com/maps/search/PLANET+Multi+Cuisine+Restaurant,+Kareelakulangara,+Kayamkulam,+Kerala+690531" target="_blank" rel="noopener noreferrer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px', verticalAlign: 'middle'}}>
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    KAREELAKULANGARA, KAYAMKULAM 
+                  </a>
+                </li>
+    <li>
+                  <a href="https://www.google.com/maps/search/Planet+Corner+Restaurant,+Planet+Square,+Prathangmood,+Junction,+Kayamkulam,+Kerala+690502" target="_blank" rel="noopener noreferrer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px', verticalAlign: 'middle'}}>
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    PRATHANGAMOOD JUNCTION, KAYAMKULAM
+                  </a>
+                </li>
+<li><a href="tel:+917025411110"><i className="fas fa-phone" /> +91 70254 11110</a></li>
+<li><a href="tel:+919745000669"><i className="fas fa-phone" /> +91 97450 00669</a></li>
           </ul>
         </div>
       </div>
@@ -989,8 +1005,8 @@ function Footer({ sectionRefs }) {
         <div className="social-links">
          <a className="social-btn" href="https://instagram.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
 <a className="social-btn" href="https://facebook.com/planetrestaurantperumbavoor" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f" /></a>
-<a className="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
-<a className="social-btn" href="tel:+919876543210"><i className="fas fa-phone" /></a>
+<a className="social-btn" href="https://wa.me/917025411110" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
+<a className="social-btn" href="tel:+917025411110"><i className="fas fa-phone" /></a>
         </div>
       </div>
     </footer>
