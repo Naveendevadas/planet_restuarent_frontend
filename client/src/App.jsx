@@ -912,7 +912,7 @@ function Branches({ branchesRef }) {
             You're here ✓
           </button>
         </div>
-        <div className="branch-card">
+        <div className="branch-card"  onClick={() => navigate("/corner")}>
           <span className="branch-tag">Second Branch</span>
           <h3 className="branch-name">Planet Corner</h3>
           <p className="branch-sub">Kayamkulam second Outlet</p>
