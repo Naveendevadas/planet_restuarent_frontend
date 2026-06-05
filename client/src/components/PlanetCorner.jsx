@@ -505,8 +505,8 @@ function MenuSection({ toastShow }) {
   // Build dynamic description from actual categories
   const categoryNames = categories.map(c => c.label);
   const menuDesc = categoryNames.length > 0
-    ? `${categoryNames.slice(0, 3).join(", ")}${categoryNames.length > 3 ? " & more" : ""} — made fresh daily at Planet Corner, Kochi.`
-    : "Delicious dishes made fresh daily at Planet Corner, Kochi.";
+    ? `${categoryNames.slice(0, 3).join(", ")}${categoryNames.length > 3 ? " & more" : ""} — made fresh daily at Planet Corner, kayamkulam.`
+    : "Delicious dishes made fresh daily at Planet Corner, kayamkulam.";
 
   return (
     <section className="corner-menu-section">
